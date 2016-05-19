@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		788B339C1CED4D6300DB71B3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B339B1CED4D6300DB71B3 /* main.m */; };
+		788B339F1CED4D6300DB71B3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B339E1CED4D6300DB71B3 /* AppDelegate.m */; };
+		788B33A21CED4D6300DB71B3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B33A11CED4D6300DB71B3 /* ViewController.m */; };
+		788B33A51CED4D6300DB71B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 788B33A31CED4D6300DB71B3 /* Main.storyboard */; };
+		788B33A81CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 788B33A61CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodeld */; };
+		788B33AA1CED4D6300DB71B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 788B33A91CED4D6300DB71B3 /* Assets.xcassets */; };
+		788B33AD1CED4D6300DB71B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 788B33AB1CED4D6300DB71B3 /* LaunchScreen.storyboard */; };
+		788B33B81CED4D6300DB71B3 /* VeterinaryDrugsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B33B71CED4D6300DB71B3 /* VeterinaryDrugsTests.m */; };
+		788B33C31CED4D6300DB71B3 /* VeterinaryDrugsUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 788B33C21CED4D6300DB71B3 /* VeterinaryDrugsUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		788B33B41CED4D6300DB71B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 788B338F1CED4D6200DB71B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 788B33961CED4D6200DB71B3;
+			remoteInfo = VeterinaryDrugs;
+		};
+		788B33BF1CED4D6300DB71B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 788B338F1CED4D6200DB71B3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 788B33961CED4D6200DB71B3;
+			remoteInfo = VeterinaryDrugs;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		788B33971CED4D6200DB71B3 /* VeterinaryDrugs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VeterinaryDrugs.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		788B339B1CED4D6300DB71B3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		788B339D1CED4D6300DB71B3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		788B339E1CED4D6300DB71B3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		788B33A01CED4D6300DB71B3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		788B33A11CED4D6300DB71B3 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		788B33A41CED4D6300DB71B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		788B33A71CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VeterinaryDrugs.xcdatamodel; sourceTree = "<group>"; };
+		788B33A91CED4D6300DB71B3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		788B33AC1CED4D6300DB71B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		788B33AE1CED4D6300DB71B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		788B33B31CED4D6300DB71B3 /* VeterinaryDrugsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VeterinaryDrugsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		788B33B71CED4D6300DB71B3 /* VeterinaryDrugsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VeterinaryDrugsTests.m; sourceTree = "<group>"; };
+		788B33B91CED4D6300DB71B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		788B33BE1CED4D6300DB71B3 /* VeterinaryDrugsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VeterinaryDrugsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		788B33C21CED4D6300DB71B3 /* VeterinaryDrugsUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VeterinaryDrugsUITests.m; sourceTree = "<group>"; };
+		788B33C41CED4D6300DB71B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		788B33941CED4D6200DB71B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788B33B01CED4D6300DB71B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788B33BB1CED4D6300DB71B3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		788B338E1CED4D6200DB71B3 = {
+			isa = PBXGroup;
+			children = (
+				788B33991CED4D6200DB71B3 /* VeterinaryDrugs */,
+				788B33B61CED4D6300DB71B3 /* VeterinaryDrugsTests */,
+				788B33C11CED4D6300DB71B3 /* VeterinaryDrugsUITests */,
+				788B33981CED4D6200DB71B3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		788B33981CED4D6200DB71B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				788B33971CED4D6200DB71B3 /* VeterinaryDrugs.app */,
+				788B33B31CED4D6300DB71B3 /* VeterinaryDrugsTests.xctest */,
+				788B33BE1CED4D6300DB71B3 /* VeterinaryDrugsUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		788B33991CED4D6200DB71B3 /* VeterinaryDrugs */ = {
+			isa = PBXGroup;
+			children = (
+				788B339D1CED4D6300DB71B3 /* AppDelegate.h */,
+				788B339E1CED4D6300DB71B3 /* AppDelegate.m */,
+				788B33A01CED4D6300DB71B3 /* ViewController.h */,
+				788B33A11CED4D6300DB71B3 /* ViewController.m */,
+				788B33A31CED4D6300DB71B3 /* Main.storyboard */,
+				788B33A91CED4D6300DB71B3 /* Assets.xcassets */,
+				788B33AB1CED4D6300DB71B3 /* LaunchScreen.storyboard */,
+				788B33AE1CED4D6300DB71B3 /* Info.plist */,
+				788B33A61CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodeld */,
+				788B339A1CED4D6300DB71B3 /* Supporting Files */,
+			);
+			path = VeterinaryDrugs;
+			sourceTree = "<group>";
+		};
+		788B339A1CED4D6300DB71B3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				788B339B1CED4D6300DB71B3 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		788B33B61CED4D6300DB71B3 /* VeterinaryDrugsTests */ = {
+			isa = PBXGroup;
+			children = (
+				788B33B71CED4D6300DB71B3 /* VeterinaryDrugsTests.m */,
+				788B33B91CED4D6300DB71B3 /* Info.plist */,
+			);
+			path = VeterinaryDrugsTests;
+			sourceTree = "<group>";
+		};
+		788B33C11CED4D6300DB71B3 /* VeterinaryDrugsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				788B33C21CED4D6300DB71B3 /* VeterinaryDrugsUITests.m */,
+				788B33C41CED4D6300DB71B3 /* Info.plist */,
+			);
+			path = VeterinaryDrugsUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		788B33961CED4D6200DB71B3 /* VeterinaryDrugs */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 788B33C71CED4D6300DB71B3 /* Build configuration list for PBXNativeTarget "VeterinaryDrugs" */;
+			buildPhases = (
+				788B33931CED4D6200DB71B3 /* Sources */,
+				788B33941CED4D6200DB71B3 /* Frameworks */,
+				788B33951CED4D6200DB71B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VeterinaryDrugs;
+			productName = VeterinaryDrugs;
+			productReference = 788B33971CED4D6200DB71B3 /* VeterinaryDrugs.app */;
+			productType = "com.apple.product-type.application";
+		};
+		788B33B21CED4D6300DB71B3 /* VeterinaryDrugsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 788B33CA1CED4D6300DB71B3 /* Build configuration list for PBXNativeTarget "VeterinaryDrugsTests" */;
+			buildPhases = (
+				788B33AF1CED4D6300DB71B3 /* Sources */,
+				788B33B01CED4D6300DB71B3 /* Frameworks */,
+				788B33B11CED4D6300DB71B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				788B33B51CED4D6300DB71B3 /* PBXTargetDependency */,
+			);
+			name = VeterinaryDrugsTests;
+			productName = VeterinaryDrugsTests;
+			productReference = 788B33B31CED4D6300DB71B3 /* VeterinaryDrugsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		788B33BD1CED4D6300DB71B3 /* VeterinaryDrugsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 788B33CD1CED4D6300DB71B3 /* Build configuration list for PBXNativeTarget "VeterinaryDrugsUITests" */;
+			buildPhases = (
+				788B33BA1CED4D6300DB71B3 /* Sources */,
+				788B33BB1CED4D6300DB71B3 /* Frameworks */,
+				788B33BC1CED4D6300DB71B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				788B33C01CED4D6300DB71B3 /* PBXTargetDependency */,
+			);
+			name = VeterinaryDrugsUITests;
+			productName = VeterinaryDrugsUITests;
+			productReference = 788B33BE1CED4D6300DB71B3 /* VeterinaryDrugsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		788B338F1CED4D6200DB71B3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "济南联祥技术有限公司";
+				TargetAttributes = {
+					788B33961CED4D6200DB71B3 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+					788B33B21CED4D6300DB71B3 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 788B33961CED4D6200DB71B3;
+					};
+					788B33BD1CED4D6300DB71B3 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 788B33961CED4D6200DB71B3;
+					};
+				};
+			};
+			buildConfigurationList = 788B33921CED4D6200DB71B3 /* Build configuration list for PBXProject "VeterinaryDrugs" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 788B338E1CED4D6200DB71B3;
+			productRefGroup = 788B33981CED4D6200DB71B3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				788B33961CED4D6200DB71B3 /* VeterinaryDrugs */,
+				788B33B21CED4D6300DB71B3 /* VeterinaryDrugsTests */,
+				788B33BD1CED4D6300DB71B3 /* VeterinaryDrugsUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		788B33951CED4D6200DB71B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788B33AD1CED4D6300DB71B3 /* LaunchScreen.storyboard in Resources */,
+				788B33AA1CED4D6300DB71B3 /* Assets.xcassets in Resources */,
+				788B33A51CED4D6300DB71B3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788B33B11CED4D6300DB71B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788B33BC1CED4D6300DB71B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		788B33931CED4D6200DB71B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788B33A21CED4D6300DB71B3 /* ViewController.m in Sources */,
+				788B339F1CED4D6300DB71B3 /* AppDelegate.m in Sources */,
+				788B33A81CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodeld in Sources */,
+				788B339C1CED4D6300DB71B3 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788B33AF1CED4D6300DB71B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788B33B81CED4D6300DB71B3 /* VeterinaryDrugsTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788B33BA1CED4D6300DB71B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788B33C31CED4D6300DB71B3 /* VeterinaryDrugsUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		788B33B51CED4D6300DB71B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 788B33961CED4D6200DB71B3 /* VeterinaryDrugs */;
+			targetProxy = 788B33B41CED4D6300DB71B3 /* PBXContainerItemProxy */;
+		};
+		788B33C01CED4D6300DB71B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 788B33961CED4D6200DB71B3 /* VeterinaryDrugs */;
+			targetProxy = 788B33BF1CED4D6300DB71B3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		788B33A31CED4D6300DB71B3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				788B33A41CED4D6300DB71B3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		788B33AB1CED4D6300DB71B3 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				788B33AC1CED4D6300DB71B3 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		788B33C51CED4D6300DB71B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		788B33C61CED4D6300DB71B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		788B33C81CED4D6300DB71B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = VeterinaryDrugs/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugs;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		788B33C91CED4D6300DB71B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = VeterinaryDrugs/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugs;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		788B33CB1CED4D6300DB71B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = VeterinaryDrugsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VeterinaryDrugs.app/VeterinaryDrugs";
+			};
+			name = Debug;
+		};
+		788B33CC1CED4D6300DB71B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = VeterinaryDrugsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VeterinaryDrugs.app/VeterinaryDrugs";
+			};
+			name = Release;
+		};
+		788B33CE1CED4D6300DB71B3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = VeterinaryDrugsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = VeterinaryDrugs;
+			};
+			name = Debug;
+		};
+		788B33CF1CED4D6300DB71B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = VeterinaryDrugsUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = VeterinaryDrugs;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		788B33921CED4D6200DB71B3 /* Build configuration list for PBXProject "VeterinaryDrugs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788B33C51CED4D6300DB71B3 /* Debug */,
+				788B33C61CED4D6300DB71B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		788B33C71CED4D6300DB71B3 /* Build configuration list for PBXNativeTarget "VeterinaryDrugs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788B33C81CED4D6300DB71B3 /* Debug */,
+				788B33C91CED4D6300DB71B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		788B33CA1CED4D6300DB71B3 /* Build configuration list for PBXNativeTarget "VeterinaryDrugsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788B33CB1CED4D6300DB71B3 /* Debug */,
+				788B33CC1CED4D6300DB71B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		788B33CD1CED4D6300DB71B3 /* Build configuration list for PBXNativeTarget "VeterinaryDrugsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788B33CE1CED4D6300DB71B3 /* Debug */,
+				788B33CF1CED4D6300DB71B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		788B33A61CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				788B33A71CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodel */,
+			);
+			currentVersion = 788B33A71CED4D6300DB71B3 /* VeterinaryDrugs.xcdatamodel */;
+			path = VeterinaryDrugs.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 788B338F1CED4D6200DB71B3 /* Project object */;
+}
