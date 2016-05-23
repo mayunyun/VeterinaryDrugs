@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface HomeSelarCell : UICollectionViewCell
+@property (strong, nonatomic) IBOutlet UIImageView *imgView;
+@property (strong, nonatomic) IBOutlet UILabel *textLabel;
 
 @end

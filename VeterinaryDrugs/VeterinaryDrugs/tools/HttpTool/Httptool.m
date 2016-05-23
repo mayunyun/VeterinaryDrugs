@@ -10,6 +10,23 @@
 
 @implementation Httptool
 
++ (void)showCustInfo:(NSString*)title MessageString:(NSString*)message
+{
+    //empty
+    if (message == nil || message.length == 0) {
+        return;
+    }
+    
+    //found html tag and other unexpected message
+    if ([message.lowercaseString rangeOfString:@"<html"].location != NSNotFound ||
+        [message.lowercaseString rangeOfString:@"an error has occurred"].location != NSNotFound)
+    {
+        message = @"服务器错误发生，我们正在解决中";
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"我知道了" otherButtonTitles:nil];
+    [alert show];
+}
+
 + (AFHTTPRequestOperationManager *)manager{
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -56,10 +73,10 @@
             NSInteger code = [operation response].statusCode;
             id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
             
-#if DEBUG
-            NSString *string = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-            DebugLog(@"\n\n urlString : %@ \n%@\n\n",url,string);
-#endif
+//#if DEBUG
+//            NSString *string = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+//            DebugLog(@"\n\n urlString : %@ \n%@\n\n",url,string);
+//#endif
             
             success(json,code);
            

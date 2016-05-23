@@ -10,9 +10,4 @@
 
 @implementation CustomCell
 
-- (void)dealloc {
-    [_textLabel release];
-    [_imageView release];
-    [super dealloc];
-}
 @end

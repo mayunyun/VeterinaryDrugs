@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstCollectionView : UICollectionView
+@interface FirstCollectionView : UICollectionView<UICollectionViewDataSource>
+
+@property (nonatomic,strong)NSArray* dataArr;
 
 @end

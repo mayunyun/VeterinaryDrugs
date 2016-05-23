@@ -29,7 +29,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-    }
+           }
     return self;
 }
 
@@ -51,21 +51,20 @@
         _scrollView.pagingEnabled = YES;
         
         for (int i = 0; i<_imageArray.count; i++) {
-          //  NSLog(@"img %@ ",[_imageArray objectAtIndex:i]);
+            //  NSLog(@"img %@ ",[_imageArray objectAtIndex:i]);
             UIImageView *imgView = [[UIImageView alloc]initWithFrame:CGRectMake(width * i, 0, width, height)];
             [imgView sd_setImageWithURL:[NSURL URLWithString:[_imageArray objectAtIndex:i]] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
-
+            
             imgView.tag = i;
             imgView.userInteractionEnabled = YES;
-//            imgView.layer.cornerRadius = 6.0f;
-//            imgView.layer.masksToBounds = YES;
+            //            imgView.layer.cornerRadius = 6.0f;
+            //            imgView.layer.masksToBounds = YES;
             [imgView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHaddle:)]];
             [_scrollView addSubview:imgView];
         }
         _scrollView.contentOffset = CGPointMake(width, 0);
-        
         _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height - 30, width, 30)];
-        _pageControl.currentPageIndicatorTintColor = RGB(240, 60, 70);
+        _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:240 green:60 blue:70 alpha:1];//RGB(240, 60, 70);
         _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
         _pageControl.numberOfPages = imgArr.count;
         _pageControl.currentPage = 0;
@@ -76,6 +75,7 @@
         [self addSubview:_pageControl];
         
         timer = [NSTimer scheduledTimerWithTimeInterval:4 target:self selector:@selector(showNextImage) userInfo:nil repeats:YES];
+
     }
     return self;
 }

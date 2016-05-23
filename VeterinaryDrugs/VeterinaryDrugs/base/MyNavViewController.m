@@ -17,7 +17,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        self.navigationBar.translucent = NO;
+    }
+    else
+    {
+    }
 }
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (self.viewControllers.count > 0) {
+        viewController.hidesBottomBarWhenPushed = YES;
+    }
+    //    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+    //        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    //    }
+    [super pushViewController:viewController animated:animated];
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -33,5 +52,27 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+//横竖屏
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (interfaceOrientation == UIDeviceOrientationPortrait)
+    {
+        return YES;
+    }
+    return NO;
+}
+- (BOOL)shouldAutorotate
+{
+    if ([[UIApplication sharedApplication]statusBarOrientation] == 3)
+    {
+        return NO;
+    }
+    return NO;
+}
 
 @end

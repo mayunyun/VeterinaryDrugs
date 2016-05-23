@@ -226,7 +226,7 @@
     
     //NSLog(@"%f",self.scrollView.contentSize.width-SCREEN_SIZE.width);
     
-    self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.contentSize.width-2*SCREEN_SIZE.width, 0, SCREEN_SIZE.width, SCREEN_SIZE.height)];
+    self.skipButton = [[UIButton alloc] initWithFrame:CGRectMake(self.scrollView.contentSize.width-2*mScreenWidth, 0, mScreenWidth, mScreenHeight)];
     
     [self.skipButton setAutoresizingMask: UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
     [self.skipButton setTitle:NSLocalizedString(@"", nil) forState:UIControlStateNormal];

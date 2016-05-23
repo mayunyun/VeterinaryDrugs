@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface HomeSelarModel : NSObject
-
+@property (nonatomic,strong)NSString* title;
+@property (nonatomic,strong)NSString* url;
 @end

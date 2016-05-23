@@ -16,13 +16,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    if (IOS7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    [self preferredStatusBarStyle];
+
 }
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+//横竖屏
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (interfaceOrientation == UIDeviceOrientationPortrait)
+    {
+        return YES;
+    }
+    return NO;
+}
+- (BOOL)shouldAutorotate
+{
+    if ([[UIApplication sharedApplication]statusBarOrientation] == 3)
+    {
+        return NO;
+    }
+    return NO;
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 /*
 #pragma mark - Navigation
