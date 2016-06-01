@@ -9,8 +9,9 @@
 #import "HomeSelarModel.h"
 
 @implementation HomeSelarModel
-- (void)setValue:(id)value forUndefinedKey:(nonnull NSString *)key
-{
 
-}
+@end
+
+@implementation HomeShopModel
+
 @end

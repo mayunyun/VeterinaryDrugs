@@ -7,14 +7,17 @@
 //
 
 #import "MyTabBarController.h"
-#import "Reachability.h"
 #import "MyNavViewController.h"
 #import "HomeViewController.h"
 #import "TypeViewController.h"
 #import "ShopViewController.h"
 #import "MineViewController.h"
+#import "Httptool.h"
+#import "Reachability.h"
 
 @interface MyTabBarController ()
+
+@property (nonatomic , strong) UILabel *hintContrl;
 
 @end
 
@@ -24,6 +27,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initVC];
+    [self netConnect];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,31 +36,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)netConnect
-{
-    //初始化提示界面
-    
-    //添加网络切换通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netWorkChangeAction:) name:kReachabilityChangedNotification object:nil];
-    
-    Reachability * reach = [Reachability reachabilityWithHostname:@"www.baidu.com"];
-    
-    reach.reachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Reachable");
-        });
-    };
-    
-    reach.unreachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Unreachable");
-        });
-    };
-    
-    [reach startNotifier];
-}
 
 - (void)initVC
 {
@@ -90,25 +70,25 @@
     self.viewControllers = list;
     
     //标题默认颜色
-    UIColor *normalColor = TabBarColor;
+    UIColor *normalColor = TabLableTextColor;
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                        normalColor, NSForegroundColorAttributeName,
                                                        nil] forState:UIControlStateNormal];
     //标题选择时的高亮颜色
-    UIColor *titleHighlightedColor = [UIColor colorWithRed:134/255.0 green:134/255.0 blue:134/255.0 alpha:1];
+    UIColor *titleHighlightedColor = TabLableLightTextColor;
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                        titleHighlightedColor, NSForegroundColorAttributeName,
                                                        nil] forState:UIControlStateSelected];
     
     
-    NSArray *imgArray = @[@"iconn1",
-                          @"iconn2",
-                          @"iconn3",
-                          @"iconn4"];
-    NSArray *selectImgArray =   @[@"iconn11",
-                                  @"iconn22",
-                                  @"iconn33",
-                                  @"iconn44"];
+    NSArray *imgArray = @[@"iconn11",
+                          @"iconn22",
+                          @"iconn33",
+                          @"iconn44"];
+    NSArray *selectImgArray =   @[@"iconn1",
+                                  @"iconn2",
+                                  @"iconn3",
+                                  @"iconn4"];
     for (int i = 0; i < 4; i++) {
         UIViewController *vc = list[i];
         vc.tabBarItem.tag = i;
@@ -128,21 +108,6 @@
     }
     
     
-}
-
-#pragma mark 通知事件
-- (void)netWorkChangeAction:(NSNotification *)notification
-{
-    Reachability * reach = [notification object];
-    
-    if([reach currentReachabilityStatus] == NotReachable)
-    {
-        //当前无网络连接
-    }
-    else if ([reach currentReachabilityStatus] == ReachableViaWWAN)
-    {
-        //当前处于2G/3G/4G网络环境!"];
-    }
 }
 
 
@@ -166,6 +131,81 @@
         return NO;
     }
     return NO;
+}
+
+- (void)netConnect
+{
+    
+    //初始化提示界面
+    self.hintContrl = [[UILabel alloc] initWithFrame:CGRectMake((mScreenWidth - 160)/2, (mScreenHeight - 90) / 2, 160, 30)];
+    self.hintContrl.backgroundColor = RGBCOLOR(0, 0, 0, .9);
+    self.hintContrl.font = [UIFont systemFontOfSize:14];
+    self.hintContrl.textColor = [UIColor whiteColor];
+    self.hintContrl.textAlignment = NSTextAlignmentCenter;
+    
+    
+    //添加网络切换通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(netWorkChangeAction:) name:kReachabilityChangedNotification object:nil];
+    
+    Reachability * reach = [Reachability reachabilityWithHostname:@"www.baidu.com"];
+    
+    reach.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Block Says Reachable");
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Block Says Unreachable");
+        });
+    };
+    
+    [reach startNotifier];
+}
+#pragma mark 通知事件
+- (void)netWorkChangeAction:(NSNotification *)notification
+{
+    Reachability * reach = [notification object];
+    if([reach currentReachabilityStatus] == NotReachable)
+    {
+        //当前无网络连接
+        [self showHint:@"当前无网络连接!"];
+        
+    }else if ([reach currentReachabilityStatus] == ReachableViaWWAN)
+    {
+        //当前处于2G/3G/4G网络环境!"];
+        [self showHint:@"当前处于2G/3G/4G网络环境!"];
+        
+    }else if ([reach currentReachabilityStatus] == ReachableViaWiFi)
+    {
+        //当前处于WiFi网络环境!"];
+        [self showHint:@"当前处于WiFi网络环境!"];
+        
+    }
+
+}
+
+- (void)showHint:(NSString *)text
+{
+    self.hintContrl.text = text;
+    self.hintContrl.alpha = 1;
+    [APPDelegate.window addSubview:self.hintContrl];
+    
+    [self performBlock:^{
+        [self hideHint];
+    } afterDelay:4];
+}
+
+- (void)hideHint
+{
+    [UIView animateWithDuration:.5 animations:^{
+        self.hintContrl.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.hintContrl removeFromSuperview];
+    }];
 }
 
 

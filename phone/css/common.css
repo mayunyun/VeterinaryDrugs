@@ -1,0 +1,604 @@
+@charset "utf-8";
+/*------------------------------------------------------------
+	clearfix
+------------------------------------------------------------*/
+.clearfix:after {
+	height: 0;
+	visibility: hidden;
+	content: ".";
+	display: block;
+	clear: both;
+}
+
+/*------------------------------------------------------------
+	common
+------------------------------------------------------------*/
+body, dl, dd, h1, h2, h3, h4, h5, h6, p, form{margin:0;font-family: "Microsoft YaHei",tahoma,arial,宋体;}
+ol,ul{margin:0; padding:0;}
+article,aside,canvas,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section,summary { display:block;}
+ol, ul {list-style: none;}
+blockquote, q {quotes: none;}
+
+:focus {
+	outline: 0;
+}
+ins {text-decoration: none;}
+
+del {text-decoration: line-through;}
+img {vertical-align: top;}
+
+a{color:#000;text-decoration: none;}
+
+@media screen and (max-device-width: 480px){
+	img{max-width:100%;height:auto;}
+}
+
+/*------------------------------------------------------------
+	body
+------------------------------------------------------------*/
+body {
+	line-height: 1.5;
+	color: #5e5e5e;
+	-webkit-text-size-adjust: none;
+}
+
+#container { overflow: hidden;}
+
+body,html {height:100%;}
+.com_pad { padding-bottom: 100px;min-height: 100%; position: relative;}
+#gFooter { position: absolute; left: 0; bottom: 0; width: 100%; padding: 0;}
+
+.orange {
+    color: #ffaa00;
+}
+
+.pad_60 { padding-bottom: 60px;}
+
+.com_div { margin: 0 20px;}
+
+.ftL { float: left;}
+.ftR { float: right;}
+
+.taCenter { text-align: center;}
+
+.red_ico,
+.red_ico_02,
+.green_ico,
+.yellow_ico,
+.yellow_ico02 { display: inline-block; color: #fff; font-size: 14px; min-width:22px; padding: 0 3px; text-align: center; border-radius:3px; margin-right:4px;}
+.red_ico { background-color: #e72418;}
+.red_ico_02 { background-color:#ff3c00;}
+.green_ico { background-color:#89cc26;}
+.yellow_ico { background-color:#ffc939;}
+.yellow_ico02 { background-color:#ff9853;}
+
+/*****gHeader*****/
+#gHeader { line-height: 1.5; position:fixed;min-height:47px; z-index:100;}
+.h_prev { margin: 12px 0 13px; padding: 0 8px 0 12px; position: absolute; left:0;}
+.h_prev a { padding-left: 20px; font-size: 15px; color: #fff; display: block; background: url(http://s.maiyaole.com/images/wap/login/ico_01.png) no-repeat left center; background-size: 12px auto; min-height: 23px;}
+.h_login { font-size: 15px; padding: 12px 18px 0 0; position: absolute; right:0;}
+.h_login a { color: #a8dfff; text-decoration: none;}
+#gHeader h1,#gHeader .h_ttl { font-size: 18px; font-weight: normal; text-align: center; color: #fff; line-height: 1.2; padding-top: 12px;}
+#gHeader .h_dress {color: #fff;background: url(http://s.maiyaole.com/images/wap/detail/icon_dress.png) no-repeat right center;background-size: 13px auto;padding-right: 20px; font-size: 14px; position:absolute; right:38px; top:50%; margin-top:-12px; display:block; width:75px; text-align:right;}
+
+.h_cart { width: 53px; font-family: Arial; position: absolute; right: 0;}
+.h_cart a {background: #0093e7 url(http://s.maiyaole.com/images/wap/cart.png) no-repeat 8px 8px; background-size: 32px auto;color: #fff;display: block;font-size: 11px;height: 43px;line-height: 43px;text-align: center;width: 100%; padding-top: 1px;}
+
+#gHeader .ft_search { background-color: #0093e7; padding: 7px 10px;}
+#gHeader .f_logo{ width: 160px;height: 33px; position: absolute; left:0;}
+
+#gHeader .h_tel { position:absolute; right:8px; font-size:12px;}
+#gHeader .h_tel i{ display:block; width:25px; height:24px; margin:0 auto; background:url(../images/bk_icon.png); margin-top:4px;}
+#gHeader .h_tel a { color:#fff; display: block; padding-top:2px;}
+
+/*****header下拉菜单****/
+.h_navi .navi_btn a,
+.h_navi ul li a,
+.h_search a { background:url(../images/ico_navi.png) no-repeat; background-size: 28px auto;}
+
+.h_navi { position: absolute; padding-top: 8px; height: 37px; z-index: 999; right: 6px;}
+.h_navi .navi_btn a { display: block; background-position: 13px 4px;background-size: 33px auto; width: 30px; height: 30px;}
+.h_navi .navi_box { position: absolute; right: 0; top: 40px; padding: 0 10px 10px; display: none;}
+.h_navi ul {box-shadow: 1px 2px 6px 1px rgba(102, 102, 102, 0.4); width: 120px; margin-top: 3px;}
+.h_navi ul li a { display: block; color: #fff; font-size: 15px; text-decoration: none; padding: 10px 5px 10px 32px; border-bottom: 1px solid #0083ce; border-top: 1px solid #0297ec; background-color:#0093e7;background-position: 8px -33px;}
+.h_navi ul li a:hover { background-color: #0083ce; border-top: 1px solid #0083ce;}
+.h_navi ul .nav_home a,.h_navi ul .nav_home a:hover { border-top: 0;}
+.h_navi ul .nav_assortment a {background-position: 8px -79px;}
+.h_navi ul .nav_cart a {background-position: 8px -124px;}
+.h_navi ul .nav_me a { border-bottom: 0; background-position: 9px -174px;}
+
+.h_search { position: absolute; right:35px;}
+.h_search a { display: block; background-position: 10px -235px; background-size: 30px auto; width: 40px; height: 43px; text-indent: -9999px;}
+
+/****header search****/
+#gHeader .search_box { position: relative; margin: 0 70px; padding: 6px 0;}
+#gHeader .search_box form { background-color:#fff; border-radius:4px; padding: 0 35px; opacity:0.8;}
+#gHeader .search_txt { border: 0; background: 0; width: 100%; padding: 5px 0; height:35px; font-size: 13px;}
+#gHeader .search_btn { border: 0; background: url(../images/ico_search.png) no-repeat; background-size: 18px auto; width: 18px; height: 18px; position: absolute; left: 10px; top: 50%; margin-top: -9px;}
+
+#gFooter { margin-top: 15px;}
+#gFooter .ft_search { background-color: #0093e7; padding: 7px 10px;}
+#gFooter .ft_logo { float: left; width: 27px;}
+#gFooter .ft_logo img {width:100%;}
+#gFooter .search_box { position: relative; width: 70%; margin: 0 auto;}
+#gFooter .search_txt { border: 0; background-color: #fff; border-radius: 20px; width: 100%; padding: 5px 0; text-indent: 30px; line-height: 20px;}
+#gFooter .search_btn { border: 0; background: url(http://s.maiyaole.com/images/wap/login/ico_search.png) no-repeat; background-size: 14px auto; width: 14px; height: 14px; position: absolute; left: 10px; top: 50%; margin-top: -6px;}
+#gFooter .pageTop { float: right; font-size: 11px; margin-top: 2px;}
+#gFooter .pageTop a { color: #fff; text-decoration: none; display: block; background: url(http://s.maiyaole.com/images/wap/login/ico_top.png) no-repeat center top; background-size: 14px auto; padding: 10px 0 0; margin:0;}
+#gFooter .ft_navi { text-align: center; color: #0093e7; font-size: 12px; padding: 10px 0;}
+#gFooter .ft_navi li { display: inline;}
+#gFooter .ft_navi li a { color: #0093e7; text-decoration: none; margin: 0 10px 0 5px;}
+
+
+.contact_fixed { position: fixed; width: 100%; z-index:99999; bottom: 0; left:0;}
+.call_list { margin: 0 8px 12px 8px; clear: both; list-style: none; padding: 0;}
+.call_list li {
+    width: 35%;
+    float: left;
+    line-height:47px;vertical-align: top;
+}
+.call_list li:first-child { width: 65%;}
+.call_list li:first-child input { background: 0;border: 1px solid #0099f1;padding: 0; margin: 0; width:100%; font-size: 16px; vertical-align: top; height: 49px; padding: 10px 0 10px 12px; line-height: 1.5; /*border-radius: 6px 0 0 6px;*/}
+.call_list li .callMe { background: 0; border: 1px solid #0099f1; border-left: 0; color: #0099f1; font-size: 12px; width: 100%;vertical-align: top; height: 49px;/*border-radius: 0 6px 6px 0;*/}
+.call_list li .callMe:hover, .call_list li .callMe:active { background-color: #0099f1; color: #fff;}
+
+.contact_fixed .call_list { background-color: #f3f3f3; margin: 0; padding:8px 10px; border-top:1px solid #dedede;}
+.contact_fixed .call_list li input { background-color: #fff;}
+.contact_fixed .call_list li .callMe {background-color: #0099f1; color: #fff;font-size: 15px;}
+.contact_fixed .list_btn,
+.contact_fixed .list_btn02 { margin: 0;}
+
+.contact_list { margin:10px 8px 12px 8px; line-height: 1.5; clear: both; list-style: none; padding: 0;}
+.contact_list li a { display: block; font-size: 15px; text-decoration: none; color: #0099f1; font-family: microsoft yahei;}
+.contact_list li:first-child { float: left; width: 49%;}
+.contact_list li:last-child { float: right; width: 49%;}
+
+.contact_list li:first-child a { border: 1px solid #0099f1; background: #fff url(http://s.maiyaole.com/images/wap/img/img_consultation.png) no-repeat 14px center; padding: 13px 0 0 68px; background-size: 45px auto; height: 49px;}
+.contact_list li:first-child a:active { color: #fff; background: #0099f1 url(http://s.maiyaole.com/images/wap/img/img_consultation_on.png) no-repeat 14px center; background-size: 45px auto;}
+.contact_list li:last-child a { color: #fff; border-bottom: 2px solid #0083ce; background:#0099f1 url(http://s.maiyaole.com/images/wap/img/img_tel.png) no-repeat 5px 12px;background-size: 20px auto; padding: 4px 0 0 28px; height: 49px;}
+.contact_list li:last-child a span { display: block; color: #b1e3ff; font-size: 12px;}
+
+.contact_div {margin:10px 8px 12px 8px; line-height: 1.5; clear: both; list-style: none; padding: 0;}
+.contact_div a {display: block; font-size: 15px; text-decoration: none; color: #0099f1; font-family: microsoft yahei;color: #fff; background:#0099f1; text-align: center; height: 51px; line-height: 49px; border-radius: 6px; padding-right: 20px;}
+.contact_div a .span_01 { display: inline-block; background: url(http://s.maiyaole.com/images/wap/img/img_doctor.png) no-repeat left center;background-size: 22px auto; padding-left: 30px;}
+.contact_div a .span_01 span { color: #b1e3ff; font-size: 12px; margin-left: 8px;}
+
+
+.list_btn,
+.list_btn02 { border-top: 1px solid #d0d0d0; background-color: #f3f3f3; clear: both; margin: 10px 0 0; padding: 8px 10px;font-family: microsoft yahei; list-style: none;}
+.list_btn li:first-child { width: 49%; float: left;}
+.list_btn li:last-child { width: 49%; float: right;}
+
+
+.comBtn { width: 100%; border: 0; background-color: #0099f1; font-size: 24px; color: #fff !important; padding: 9px 0 8px; cursor: pointer; border-radius: 3px; text-align: center; display: block;}
+.comBtn:hover { background-color: #0083ce;}
+
+.red_btn,
+.gray_btn,
+.bule_btn,
+.green_btn {display: block; text-align: center; font-size: 15px; color: #fff !important; text-decoration: none; line-height: 44px; text-decoration: none;background-color: #e72419; border-radius: 3px; border:0;}
+.red_btn:hover,
+.gray_btn:hover,
+.bule_btn:hover,
+.green_btn:hover { text-decoration: none;}
+.bule_btn:hover {background-color: #0083ce;}
+.gray_btn {background-color: #b8b8b8;}
+.bule_btn {background-color: #0099f1;}
+.green_btn { background-color: #89cc26;}
+
+.btn_close { text-indent: -9999px; background:url(http://s.maiyaole.com/images/wap/login/ico_close.png) no-repeat; background-size: 20px auto; width: 20px; height: 20px; position: absolute; right: -7px; top: -7px; display: block;}
+
+.bor_black_btn,
+.bor_blue_btn,
+.bor_red_btn {border: 1px solid #0093e7; color:#0093e7; border-radius:3px; display: inline-block; width: 83px; line-height:30px; text-align: center; font-size:14px;}
+.bor_black_btn {border: 1px solid #333; color:#333;}
+.bor_red_btn {border: 1px solid #e72419; color:#e72419;}
+
+/*****select仿照*****/
+.select {
+	margin: 10px 10px 0;
+	color: #5e5e5e;
+	border-bottom: 0;
+    position: relative;
+    z-index: 999;
+	font-size: 15px;
+}
+.select .select_on {
+    color: #5e5e5e;
+    height: 41px;
+    line-height: 41px;
+    padding: 0 0 0 20px;
+	background-color: #fff;
+	position: relative;
+    border: 1px solid #e6e6e6;
+}
+.select .select_on:after {
+	content:"";
+	display: block;
+	width: 21px;
+	height: 12px;
+	background: url(http://s.maiyaole.com/images/wap/login/ico_select.png) no-repeat;
+	background-size: 21px auto;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -6px;
+}
+.select ul {
+	position: relative;
+	border-left: 1px solid #e8e8e8;
+	border-right: 1px solid #e8e8e8;
+	background-color: #fff;
+    display: none;
+    width: 100%;
+    z-index: 10000;
+}
+.select ul li {
+    padding: 9px 20px;
+    color: #5e5e5e;
+	border-bottom: 1px solid #e8e8e8;
+}
+.select ul li.hover {
+	background: #f7f7f7;
+}
+
+
+/*****switchery按钮*****/
+.switchery {
+    background: #efefef url(http://s.maiyaole.com/images/wap/login/ico_abc.png) no-repeat right center;
+	background-size: 30px auto;
+    border: 1px solid #e6e6e6;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-block;
+    height: 22px;
+    margin-right: 4px;
+    position: relative;
+    vertical-align: middle;
+    width: 68px;
+}
+.switchery > small {
+    background: none repeat scroll 0 0 #fff;
+	box-shadow: 0 1px 0 #e6e6e6;
+    border-radius: 100%;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    width: 20px;
+}
+
+
+/*****alert*****/
+.alert {
+  padding:10px 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert h4 {
+  margin-top: 0;
+  color: inherit;
+}
+.alert .alert-link {
+  font-weight: bold;
+}
+.alert > p,
+.alert > ul {
+  margin-bottom: 0;
+}
+.alert > p + p {
+  margin-top: 5px;
+}
+.alert-dismissable {
+  padding-right: 35px;
+}
+.alert-dismissable .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  color: inherit;
+}
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+.alert-success hr {
+  border-top-color: #c9e2b3;
+}
+.alert-success .alert-link {
+  color: #2b542c;
+}
+.alert-info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #31708f;
+}
+.alert-info hr {
+  border-top-color: #a6e1ec;
+}
+.alert-info .alert-link {
+  color: #245269;
+}
+.alert-warning {
+  background-color:#fffeee;
+  border-color:#ffe288;
+  color:#a5a5a5;
+}
+.alert-warning hr {
+  border-top-color: #f7e1b5;
+}
+.alert-warning .alert-link {
+  color: #66512c;
+}
+.alert-danger {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}
+.alert-danger hr {
+  border-top-color: #e4b9c0;
+}
+.alert-danger .alert-link {
+  color: #843534;
+}
+
+/******modal btn******/
+.modal.contact_custome { width: 270px; margin-left: -135px;}
+.contact_custome .modal-header { padding: 30px 10px;}
+.contact_custome .modal-header p { font-size: 15px; color: #000;}
+.modal-footer .modal_btn,
+.modal-footer .modal_btn02 { display: block; width: 50%; float: left; float: left; text-align: center; line-height: 50px; color: #0099f1;}
+.modal-footer .modal_btn02 { width: 100%;}
+.modal-footer .modal_btn:first-child { border-right: 1px solid #cfcfcf;}
+.modal-footer .consult i,
+.modal-footer .call i { display: inline-block; text-indent: -9999px; background: url(http://s.maiyaole.com/images/wap/img/img_consultation.png) no-repeat; background-size: 36px auto; width: 36px; height: 24px; margin-right: 5px; vertical-align: middle; margin-top: -3px;}
+.modal-footer .call i {background-image: url(http://s.maiyaole.com/images/wap/ico_tel.png); background-size: 24px auto; width: 24px; height: 30px; margin-top: 0;}
+
+/******pageTop******/
+.p_top {
+	width: 40px;
+	height: 40px;
+	position: fixed;
+	right: 10px;
+	bottom: 65px;
+	z-index: 1036;
+}
+.p_top a {
+	border-radius: 20px;
+	background-color: #0099f1;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	display: block;
+	padding-top: 9px;
+	position: relative;
+	border-radius: 4px 0 0 4px;
+	background: url(http://s.maiyaole.com/images/wap/pagetop_bg.png) repeat;
+}
+.p_top a img { width: 23px;}
+
+
+/******search html******/
+#search_div { background-color: #fff; height: 100%;}
+.h_search_btn { position: absolute; right:0; padding-right: 2px;}
+.btn_search { border: 0; background: none; font-size: 18px; color: #fff; line-height: 40px; padding: 0 6px;}
+
+.mianConts { background-color: #fff;}
+.search_list { padding: 10px 0; font-size: 15px; clear:both;}
+.search_list li { float: left; width: 33.3333333333%; padding: 0 10px;}
+.search_list li a { color: #6c6c6c; text-decoration: none;}
+.clear_txt,
+.change_txt { text-align: center; padding: 20px 0;}
+.clear_txt a,.change_txt a { background: url(http://s.maiyaole.com/images/wap/detail/icon_delect.png) no-repeat left center; background-size: 16px auto; font-size: 15px; color: #a5a5a5; text-decoration: none; display: inline-block; padding-left: 25px; line-height: 28px;}
+.change_txt a { background-image: url(http://s.maiyaole.com/images/wap/ico_change.png); background-size: 20px auto; color: #0099f1;}
+
+.list_ul { font-size: 15px; overflow:hidden; background-color: #fff; margin-bottom: 20px;}
+.list_ul li { border-bottom: 1px solid #ddd; padding: 12px 20px 13px; margin-bottom: -1px; color:#6c6c6c;}
+.list_ul li a {color:#6c6c6c; text-decoration: none;}
+
+.search_close {background:url(http://s.maiyaole.com/images/wap/redenvelope/icon_guan.png) no-repeat; background-size:20px auto; width: 20px; height: 20px; display: block; position: absolute; right: 5px; top:50%; margin-top: -11px; text-height: -9999px; cursor: pointer;}
+.com_close {margin: 0 auto; width: 200px;}
+.com_close a { font-size: 16px;}
+
+#search_div .p_nav { margin-bottom: 10px;}
+.p_nav { background-color: #fff; border-top: 1px solid #e8e8e8;}
+.p_nav li { float: left; width: 50%;}
+.p_nav li a { display: block; width: 100%; text-align: center; font-size: 15px; color: #999; border-bottom: 1px solid #e8e8e8; text-decoration: none; padding: 10px 0;}
+.p_nav li a:hover,
+.p_nav li .active { color: #0099f1;border-bottom: 2px solid #0099f1; padding-bottom: 9px;}
+
+.p_nav02 li { width:25%;}
+
+
+.com_modal .i_close,
+.reply_box .ico_arrow,
+.talk_box .talk_link,
+.cart_btm a ,.talk_box li a span,
+.talk_ul .i_arrow,
+.h_tel i {background:url(../images/ico_detail.png) no-repeat;}
+
+/*****1姐回复*****/
+.reply_box { background-color:#f2f2f2; border-radius:3px; position:relative;}
+.reply_box p { padding: 15px;}
+.reply_box p span { color:#ffaa00;}
+.reply_box .ico_arrow { text-indent:-9999px; width:20px; height:10px; background-position:-88px -333px; position:absolute; left:15px; top:-8px;}
+
+/*****common modal*****/
+.com_modal .modal-content {box-shadow:none; border:0;}
+.com_modal .modal-dialog {width:220px; margin-left:-110px;}
+.com_modal p { font-size:13px; color:#5e5e5e; text-align:center; padding: 0 16px 15px;}
+.com_modal .ttl_p { color:#000; font-size:16px; padding: 20px 0 5px;}
+.input_div { margin: 0 12px 20px; position:relative;}
+.input_div input { background:0; border:1px solid #aeaeae; border-radius:3px; width:100%; height:35px; padding:0 8px; font-size:15px; color:#000;}
+.com_modal .i_close { background-position:-134px -240px; background-size:220px auto; display:block; width:18px; height:18px; position:absolute; right:10px; top:50%; margin-top:-9px; text-indent:-9999px; cursor:pointer;}
+.modal_btn { border-top:1px solid #cfcfcf; line-height:44px; overflow:hidden;}
+.modal_btn a { display: block; font-size:15px; color:#0099f1; text-align: center;box-sizing: border-box;}
+.modal_btn02 a { width:50%; float:left;}
+.modal_btn02 a:first-child { border-right:1px solid #cfcfcf;}
+
+/*****多客宝*****/
+.fixed_box { position:relative; z-index:99991;}
+.fixed_box .fixed_bg { position: fixed; width:100%; height:100%; background-color:#000;opacity: 0.4;filter: alpha(opacity=40); left:0; top:0; z-index:1; text-indent:-9999px;}
+.fixed_box .btm_fixed .fixed_bg { position: absolute; background-color:#3d3d3d; border-radius:20px;opacity: 0.8;filter: alpha(opacity=80);}
+.talk_bg { display:none;}
+
+.btm_fixed { position:fixed; left:10px; bottom:25px; width:90px; z-index:5;}
+.talk_box { position:relative; float:left;z-index:5;}
+
+.talk_box .talk_link,.cart_btm a ,.talk_box li a span,.talk_ul .i_arrow {background-size:170px auto; color:#5e5e5e;}
+
+.talk_ul { position:relative; padding-bottom:15px; position:absolute; left:0; bottom: 40px; width:140px;-webkit-transition:all 0.3s;transition:all 0.3s;-webkit-transform:translate(-45px,115px) scale(0,0) rotate(0);transform:translate(-45px,115px) scale(0,0) rotate(0);}
+.talk_ul.open { -webkit-transform:translate(0,0) scale(1,1) rotate(0);transform:translate(0,0) scale(1,1) rotate(0);}
+.talk_ul .i_arrow { background-size:300px auto; position:absolute; left:10px; bottom:7px; text-indent:-9999px; display: block; width:26px; height:13px;background-position:-247px -229px;}
+
+.talk_box .talk_link {display:block; width:45px; height:40px; background-position:7px -345px; position:relative;}
+.talk_box li a span { margin-right:10px;background-position:0 -401px;width:33px; height:21px; float:left; position:relative;}
+.talk_box li a.talk_qnaire span { margin-right:10px;background-position:-115px -445px;width:33px; height:21px; float:left; position:relative;}
+.talk_box ul {background-color:#fff; font-size:15px; padding: 0 12px; overflow:hidden;}
+.talk_box ul li { list-style:none; float:left; width:100%; border-bottom:1px solid #d1d1d1; padding: 7px 0; margin-bottom:-1px;}
+.talk_box ul li a { color:#939393; text-decoration:none; display:block; padding: 5px 0;}
+.cart_btm { float: left;z-index:5; position:relative;}
+.cart_btm a {background-position:-70px -114px; display:block; width:45px; height:40px;border-left:1px solid #939393; position:relative;}
+.cart_btm a i,
+.talk_box .talk_link i,
+.talk_box li a span i { display: block; width: 18px; height:18px; text-align:center; background-color: #e72418; border-radius:9px; line-height:13px; font-size:11px; font-family:Arial; color:#fff; position: absolute; right:5px; top:6px; padding-top:3px; font-style:normal;}
+.talk_box li a span i { top:-8px; right:-2px;}
+
+.fixed_box02 .btm_fixed { bottom: 65px; width:40px;}
+.fixed_box02 .talk_box .talk_link { width:40px;background-position: 8px -342px;}
+
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus { color:#000;background-color: #fff;}
+
+/*****CMS专用多客宝*****/
+.cms_talk_box .talk_ul li a span{background: url("http://s.maiyaole.com/images/wap/ico_detail.png") no-repeat;background-size:170px auto;background-position: 5px -400px;}
+.cms_talk_box li a span { margin-right:10px;background-position:0 -445px;width:33px; height:22px; float:left; position:relative;}
+.talk_box li a.talk_qnaire span { margin-right:10px;background-position:-57px -495px;width:33px; height:22px; float:left; position:relative;}
+.cms_fixed_box{position:relative; z-index:99991;}
+.cms_fixed_box .cms_btm_fixed{position:fixed; left:10px; bottom:25px; width:182px; z-index:5;border-radius: 20px;}
+.cms_talk_box{position: relative;float: left;width: 45px;background-color: rgba(77,77,77,.8);border-radius: 80% 0 0 80%;}
+.cms_talk_box .cms_talk_link { position:relative;display:block;background: url("http://s.maiyaole.com/images/wap/ico_detail.png") no-repeat;background-size:170px auto; width:45px; height:40px;background-position:12px -340px;}
+.cms_cart_box{position: relative;float: left;width: 45px;background-color: rgba(77,77,77,.8);border-radius: 0 20px 20px 0;}
+.cms_cart_box .cms_cart_link{position: relative;display: block;width: 45px;background: url("http://s.maiyaole.com/images/wap/ico_detail.png") no-repeat;background-size:170px auto; height: 40px;background-position:-115px -485px;}
+.cms_talk_border{position: relative;width: 5px;height: 40px;float: left;background-color: rgba(77,77,77,.8);}
+.cms_talk_border:after{position: absolute;width: 1px;height: 30px;top:5px;left:2px;background-color: #fff;content: "";}
+.cms_cart_num{background-color: red;padding: 0 5px;border-radius:6px;color:#fff; position: absolute; top:5px;right:8px; font-size: 8px;max-width: 20px;overflow: hidden;text-overflow:ellipsis;}
+
+/*****多客宝意见反馈*****/
+.qnaire_form{display: block;width: 100%;padding:15px;}
+.qnaire_form .qnaire_text{position: relative;float: left; display: block;width: 100%;padding: 5px 10px;border-color:#ccc;}
+.qnaire_form .qnaire_text:hover,
+.qnaire_form .qnaire_text:focus{border-color:#0099f1;}
+.qnaire_form .qnaire_phone{position: relative;float: left;margin-top: 15px;display: block;width: 100%;border-color: transparent;border-bottom-color: #ccc;padding: 5px;border-bottom-width: 1px;}
+.qnaire_form .qnaire_phone:hover,
+.qnaire_form .qnaire_phone:focus{border-bottom-color:#0099f1;}
+.qnaire_form .qnaire_btn{position: relative;float: left;padding: 8px;margin-top: 15px;display: block;width: 100%;background-color: #fff;color: #ff2222;border:1px solid #ccc;}
+.qnaire_form .qnaire_tips{position: relative;float: left;margin-top: 20px;display: block;text-align: center;width: 100%;color: #aaa;}
+/*****goods_list*****/
+.goods_list { padding: 0 5px 5px 0;}
+.goods_list li { float: left; width:50%; padding: 5px 0 0 5px; font-size:13px;}
+.goods_list li a { display:block; background-color:#fff; padding: 10px 8%; border:1px solid #ddd;}
+.goods_list li a img { display:block; vertical-align:baseline;}
+.goods_list li a span { display:block;}
+.goods_list li a .goods_txt { height:38px; overflow:hidden; margin-bottom:5px; color:#666;}
+.goods_list li a .i_price { font-family:Arial; font-size:13px; color:#ccc;}
+.goods_list li a .i_price i { color:#e72419; font-style:normal; font-weight:bold; font-size:15px; margin-right:10px;}
+
+/*****NO Search Results*****/
+.no_results { background:#fffccc url(http://s.maiyaole.com/images/wap/bg_nosearch.png) repeat-x left bottom; padding: 20px 0 25px; background-size:20px auto;}
+.no_results p { font-size:14px; text-align:center; color:#666; line-height:1.7;}
+.no_results p i { color:#ff9900; font-style:normal;}
+
+/*****No find*****/
+.nofind_box { margin:0 auto; padding: 60px 0 20px; text-align:center;}
+.nofind_box img {width:120px;}
+.nofind_box p { text-align:center; padding: 15px 0 20px;}
+.nofind_box dl { text-align: left; margin:0 auto; width:280px; line-height:40px;}
+.nofind_box dl dd { padding-left: 28px;}
+
+/*****恶意评价规则*****/
+#price_evil { background-color:#f3f3f3;}
+#price_evil #main { padding: 15px 10px; line-height:1.6;}
+#price_evil p { text-indent:28px; margin-bottom:10px;}
+#price_evil dl dt { float:left;}
+#price_evil dl dd { padding-left:20px;}
+#price_evil dl dd p { padding-left:8px; text-indent:-8px; margin:0;}
+
+/*****下拉*****/
+.pri_navi .more_btn a { background:url(http://s.maiyaole.com/images/wap/ico_index.png) no-repeat; background-size:168px auto;}
+.pri_navi { clear:both; background-color:#fff;border-bottom:1px solid #e5e5e5; position:relative;}
+.pri_navi .ul_navi { float: left; width:89%;}
+.pri_navi .ul_navi li { float: left; width:25%;}
+.pri_navi .ul_navi li a { display:block; text-align:center; color:#545454; padding: 11px 0;}
+.pri_navi .ul_navi li .on,
+.pri_navi .pop_nai ul li .on { color:#0093e7;}
+.pri_navi .ul_navi li .on { border-bottom:2px solid #0093e7; padding-bottom:9px;}
+.pri_navi .more_navi { float:right; width:10%; border-left:1px solid #e5e5e5; padding: 6px 0; margin-top:10px;}
+.pri_navi .more_btn a { display:block; margin:0 auto; width: 20px; height:12px; background-size:200px auto; background-position:-66px -13px;}
+.pri_navi .pop_nai { position:absolute; left:0; top:43px; width:100%;display:none;}
+.pri_navi .pop_nai ul { position:relative; z-index:4; padding: 4% 0 2% 1%;}
+.pri_navi .pop_nai ul li { float: left; padding: 0 5% 3%;}
+.pri_navi .pop_nai ul li a { color:#fff;}
+.pri_navi .pop_nai .bg_01 { background-color:#000;opacity: 0.6;filter: alpha(opacity=60); position:absolute; left:0; top:0; width:100%; height:100%; z-index:2;}
+
+/*****退换货*****/
+.info_div {padding:15px 10px; overflow:hidden; position: relative;}
+.info_ul {overflow:hidden; overflow-x:auto;}
+.info_ul table {height:55px; border-collapse:collapse; width:auto;}
+.info_ul table td { width:55px; padding-right:10px; text-align:left;}
+.info_ul table td a { display: block; width:55px;}
+.info_ul table td a img {width:55px;}
+
+.order_ttl { margin:0 10px; padding: 15px 5px 15px 0; color:#333; line-height:1.2; font-size:15px;}
+.order_ttl02 { margin:0; border-bottom:1px solid #e8e8e8;padding: 15px 10px;}
+.order_ttl i { float: right; font-style:normal; color:#e72418; font-size:14px;}
+.order_ttl span { display:inline-block; border-right:1px solid #e8e8e8; padding-right:10px; margin-right:10px;}
+
+
+.mb0 { margin-bottom:0 !important;}
+
+.logistics_info li i,
+.logistics_box .logistics_info li:after,
+.exclusive_price,
+.app_download .app_close{background:url(http://s.maiyaole.com/images/wap/icon_common.png) no-repeat;background-size: 100px auto;}
+
+/*****APP Download*****/
+.app_download {position: relative;}
+.app_download .app_close { left:3%; cursor:pointer; position:absolute; top:3%; width:22px; height:22px;background-position:-98px -218px; background-size:130px auto;}
+
+
+/**********/
+.pro_info {background-color: #fff;border-bottom: 1px solid #e8e8e8;padding: 15px 10px;overflow: hidden;zoom: 1;}
+.pro_info .img_box {width: 60px;float: left;margin: 5px 10px 0 0;}
+.pro_info .img_box img {width: 60px;}
+.pro_info .des_info {font-size: 14px;color: #333;line-height: 1.6; overflow:hidden;}
+.pro_info .des_info a {color: #333; text-decoration:none;}
+.pro_info .des_info .pro_price {min-width: 110px;display: inline-block;}
+.pro_info .des_info .pro_name {margin-bottom: 5px; height:45px; overflow:hidden;}
+
+/*物流信息*/
+.logistics_info {padding: 15px 10px 13px 20px;}
+.logistics_info li {border-left: 1px solid #e8e8e8;padding: 0 0 10px 20px;position: relative;}
+.logistics_info .current { color:#0093e7;}
+.logistics_info .current .date_time { color:#333;}
+.logistics_info li i {width: 20px;height: 20px;position: absolute;left: -10px;top: 0;background-position: 0 -30px;display: block;}
+.logistics_info li .date_time {margin-top: 5px;}
+.logistics_info li .date_time .date {margin-right: 10px;}
+.logistics_box {background-color: #fff; border-bottom:1px solid #e8e8e8;}
+.logistics_box .logistics_info {color: #a5a5a5;}
+.logistics_box .logistics_info li {padding-right: 20px;}
+.logistics_box .logistics_info li:after {content: "";width: 10px;height: 18px;position: absolute;right: 0px;top: 50%; margin-top:-9px;display:block;background-position: -130px -90px; background-size:140px auto;}
+
+/*****退款规则*****/
+.rule_txt { color:#545454; padding:20px 15px; line-height:1.7; font-size:14px;}
+.rule_txt dt { font-size:16px;font-weight: normal; color:#333; margin-bottom:8px;}
+
+.exclusive_price{display:inline-block; width:67px; height:25px; background-position:-62px -182px; background-size:130px auto; vertical-align:middle;}
+
+.exclusive_txt {padding:0 12px 15px; color:#e72418; margin-top:-8px; line-height:28px;}
+.exclusive_txt .exclusive_price{width:16px; height:24px; background-position:-107px -154px; margin-right:8px;}

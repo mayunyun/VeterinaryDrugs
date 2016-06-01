@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+* {margin:0;padding:0;list-style:none;border:0;font-family:"微软雅黑";}
+body {
+    padding: 0px;
+    margin: 0px;
+}
+p {
+    font-size: 15px;
+    color: #808080;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#myimage {
+    background-image: url(ico_01@2x.png);
+    background-repeat: repeat-x;
+}
+
+/*footer*/

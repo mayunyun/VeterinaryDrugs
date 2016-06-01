@@ -10,4 +10,7 @@
 
 @interface MyNavViewController : UINavigationController
 
+//返回按钮
++ (UIBarButtonItem *)backBarButtonItemTarget:(id)target action:(SEL)action;
+
 @end

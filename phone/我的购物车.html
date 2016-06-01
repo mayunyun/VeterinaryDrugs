@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>手机兽药网_网上药店_全国正规合法网上药房_网上购买药品就上兽药网</title>
+<meta name="keywords" content="网上药店,网上药房,药房网,药品网,网上买药,网上购药,兽药网">
+<meta name="description" content="兽药网平台，为您网上买药提供超越传统药店的贴心服务。">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/index.css">
+<link href="css/liebiao.css" rel="stylesheet" type="text/css">
+<script src="js/jquery.min.js"></script>
+</head>
+<body style="height: auto;background-color: #efefef;">
+<!--head-->
+<header class="clearfix" id="gHeader">
+		<div class="h_prev">
+        	<a href="javascript:history.back();"></a>
+        </div>
+		<div class="h_navi">
+        	<div class="navi_btn">
+            	<a href="javascript:void(0);" class="head_listBox"></a>
+            </div>
+            <div class="navi_box">
+            	<ul>
+                	<li><a href="#" href="javascript:goHome();">首页</a></li>
+                    <li><a href="#" href="javascript:goHome();">购物车</a></li>
+                    <li><a href="#" href="javascript:goHome();">我</a></li>
+                </ul>
+            </div>
+        </div>
+        <h1>购物车</h1>
+</header>      
+<script>
+$(document).ready(function(){
+  $(".head_listBox").click(function(){
+    $(".navi_box").slideToggle();
+  });
+});
+</script>        
+<div style="height:47px;"></div>
+<!--我的兽药网-->
+<div id="main" class="com_pb">
+	<div class="cartBox">
+    	<div class="storeName">
+        	<input type="checkbox" class="input_01">
+            <label>兽药网</label>
+        </div>
+        <!--start-->
+        <div class="proListBox">
+        	<div class="check-box01">
+            	<input type="checkbox" class="input_01">
+            </div>
+        	<a href="#" class="btnDelete"></a>
+            <div class="imgBox">
+            	<img src="images/50_50.jpg">
+            </div>
+            <div class="textBox">
+            	<p class="title">
+                	<a href="#">同仁堂 板蓝根颗粒(无蔗糖) 3g*10袋</a>
+                </p>
+                <p class="price"><span>￥ 10.0</span></p>
+                <div class="p_num clearfix">
+                	<button class="btn reduce" type="button">-</button>
+                    <input class="num" value="1" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
+                    <button class="btn add">+</button>
+                </div>
+            </div>
+        </div>
+        <!--end-->
+        <!--start-->
+        <div class="proListBox">
+        	<div class="check-box01">
+            	<input type="checkbox" class="input_01">
+            </div>
+        	<a href="#" class="btnDelete"></a>
+            <div class="imgBox">
+            	<img src="images/50_50.jpg">
+            </div>
+            <div class="textBox">
+            	<p class="title">
+                	<a href="#">同仁堂 板蓝根颗粒(无蔗糖) 3g*10袋</a>
+                </p>
+                <p class="price"><span>￥ 10.0</span></p>
+                <div class="p_num clearfix">
+                	<button class="btn reduce" type="button">-</button>
+                    <input class="num" value="1" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
+                    <button class="btn add">+</button>
+                </div>
+            </div>
+        </div>
+        <!--end-->
+    </div>
+    <!--运费 start-->
+    <ul class="tatolBox">
+    	<li>商品金额<span style="color:#e72419">￥0.00</span></li>
+        <li>优惠金额<span style="color:#e72419">￥0.00</span></li>
+        <li>运费<span style="color:#e72419">￥0.00</span></li>
+        <li>重量<span style="color:#e72419">￥0.00</span></li>
+    </ul>
+    <div class="conttact_fixed">
+    	<div class="cartSettlement">
+        	<a href="#" class="red_btn">去结算</a>
+            
+				应付金额：
+                <span class="red" style="font-weight:bold; font-size:18px;">￥0.00</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -7,16 +7,17 @@
 //
 #import "AFNetworking.h"
 #import <Foundation/Foundation.h>
-#define ZhiXuanLCHttpServer @"http://192.168.1.41/newsoyaom/mobile/"
+#define ShouYaoHttpServer @"http://www.soyaom.com/mobile"//@"http://192.168.1.41/newsoyaom/mobile"//
+#define RootPath @"http://www.soyaom.com"
 //#define ZhiXuanLCHttpServer @"http://192.168.1.205:8083/fin/getview/app"
 //#define ZhiXuanLCHttpServer @"http://222.128.91.229:61803/fin/getview/app"//外网测试
 //#define ZhiXuanLCHttpServer @"http://222.128.91.229:28080/fin/getview/app"//@"http://192.168.1.99:9191/fin/getview/app"//第二版
 //#define ZhiXuanLCHttpServer @"http://222.128.91.229:29191/fin/getview/app" //@"http://192.168.1.129:8080/fin/getview/app"
 
-//#define ZhiXuanLPayProcol @"http://222.128.91.229:61803/fin/getview/app"
+#define ShouYaoWapServer @"http://www.soyaom.com/wap"//@"http://192.168.1.41/newsoyaom/wap"
 
 
-#define ZhiXuanhtml5Dir @"http://222.128.91.229:28080/fin"//@"http://192.168.1.205:8083/fin"
+//#define ZhiXuanhtml5Dir @"http://222.128.91.229:28080/fin"//@"http://192.168.1.205:8083/fin"
 
 ////#define ZhiXuanLCHttpServer @"http://222.128.91.229:29191/fin/getview/app"
 //=======

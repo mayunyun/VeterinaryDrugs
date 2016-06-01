@@ -8,15 +8,32 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeSelarCell"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeSelarCellID" id="gTV-IL-0wX" customClass="HomeSelarCell">
-            <rect key="frame" x="0.0" y="0.0" width="101" height="112"/>
+            <rect key="frame" x="0.0" y="0.0" width="101" height="151"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="101" height="112"/>
+                <rect key="frame" x="0.0" y="0.0" width="101" height="151"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="兽药" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXd-YH-bXf">
-                        <rect key="frame" x="0.0" y="87" width="101" height="25"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXd-YH-bXf">
+                        <rect key="frame" x="0.0" y="87" width="101" height="48"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="48" id="RzJ-jG-rOu"/>
+                            <constraint firstAttribute="width" constant="101" id="gSJ-Cq-2EH"/>
+                        </constraints>
+                        <attributedString key="attributedText">
+                            <fragment content="兽药dang6778668er7eguflbgljkfbrvj;fvndfklbvl bak n/f, fk">
+                                <attributes>
+                                    <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <font key="NSFont" size="10" name="PingFangSC-Regular"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                </attributes>
+                            </fragment>
+                        </attributedString>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="价格" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uYC-kP-Ifj">
+                        <rect key="frame" x="0.0" y="135" width="101" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.87296796089999995" green="0.092208152739999993" blue="0.14165856739999999" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CcS-WS-5Bw">
@@ -29,18 +46,22 @@
                 <constraint firstAttribute="trailing" secondItem="CcS-WS-5Bw" secondAttribute="trailing" constant="-5" id="8BB-L3-cwY"/>
                 <constraint firstItem="CcS-WS-5Bw" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="8Ef-OQ-Puh"/>
                 <constraint firstAttribute="trailing" secondItem="bXd-YH-bXf" secondAttribute="trailing" id="DN3-HS-vSK"/>
+                <constraint firstAttribute="trailing" secondItem="uYC-kP-Ifj" secondAttribute="trailing" id="EiO-5B-OSY"/>
                 <constraint firstItem="bXd-YH-bXf" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="FUC-1f-89b"/>
-                <constraint firstAttribute="bottom" secondItem="CcS-WS-5Bw" secondAttribute="bottom" constant="23" id="SHm-Om-b1W"/>
+                <constraint firstItem="uYC-kP-Ifj" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="OUW-RB-rFl"/>
+                <constraint firstAttribute="bottom" secondItem="CcS-WS-5Bw" secondAttribute="bottom" constant="62" id="SHm-Om-b1W"/>
+                <constraint firstAttribute="bottom" secondItem="uYC-kP-Ifj" secondAttribute="bottom" id="aW0-gw-WdC"/>
                 <constraint firstItem="bXd-YH-bXf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="87" id="imd-c7-pLL"/>
                 <constraint firstItem="CcS-WS-5Bw" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="vUW-Mk-f5p"/>
-                <constraint firstAttribute="bottom" secondItem="bXd-YH-bXf" secondAttribute="bottom" id="wgI-fw-Syo"/>
+                <constraint firstAttribute="bottom" secondItem="bXd-YH-bXf" secondAttribute="bottom" constant="16" id="wgI-fw-Syo"/>
             </constraints>
-            <size key="customSize" width="101" height="112"/>
+            <size key="customSize" width="101" height="151"/>
             <connections>
                 <outlet property="imgView" destination="CcS-WS-5Bw" id="Rjp-9b-ZDd"/>
+                <outlet property="priceLabel" destination="uYC-kP-Ifj" id="v77-ye-R49"/>
                 <outlet property="textLabel" destination="bXd-YH-bXf" id="Mxv-58-JR0"/>
             </connections>
-            <point key="canvasLocation" x="278.5" y="246"/>
+            <point key="canvasLocation" x="278.5" y="265.5"/>
         </collectionViewCell>
     </objects>
 </document>

@@ -1,0 +1,2687 @@
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.0
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+/* ========================================================================
+ * Bootstrap: button.js v3.0.3
+ * http://getbootstrap.com/javascript/#buttons
+ * ========================================================================
+ * Copyright 2013 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+  // BUTTON PUBLIC CLASS DEFINITION
+  // ==============================
+
+  var Button = function (element, options) {
+    this.$element = $(element)
+    this.options  = $.extend({}, Button.DEFAULTS, options)
+  }
+
+  Button.DEFAULTS = {
+    loadingText: 'loading...'
+  }
+
+  Button.prototype.setState = function (state) {
+    var d    = 'disabled'
+    var $el  = this.$element
+    var val  = $el.is('input') ? 'val' : 'html'
+    var data = $el.data()
+
+    state = state + 'Text'
+
+    if (!data.resetText) $el.data('resetText', $el[val]())
+
+    $el[val](data[state] || this.options[state])
+
+    // push to event loop to allow forms to submit
+    setTimeout(function () {
+      state == 'loadingText' ?
+        $el.addClass(d).attr(d, d) :
+        $el.removeClass(d).removeAttr(d);
+    }, 0)
+  }
+
+  Button.prototype.toggle = function () {
+    var $parent = this.$element.closest('[data-toggle="buttons"]')
+    var changed = true
+
+    if ($parent.length) {
+      var $input = this.$element.find('input')
+      if ($input.prop('type') === 'radio') {
+        // see if clicking on current one
+        if ($input.prop('checked') && this.$element.hasClass('active'))
+          changed = false
+        else
+          $parent.find('.active').removeClass('active')
+      }
+      if (changed) $input.prop('checked', !this.$element.hasClass('active')).trigger('change')
+    }
+
+    if (changed) this.$element.toggleClass('active')
+  }
+
+
+  // BUTTON PLUGIN DEFINITION
+  // ========================
+
+  var old = $.fn.button
+
+  $.fn.button = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.button')
+      var options = typeof option == 'object' && option
+
+      if (!data) $this.data('bs.button', (data = new Button(this, options)))
+
+      if (option == 'toggle') data.toggle()
+      else if (option) data.setState(option)
+    })
+  }
+
+  $.fn.button.Constructor = Button
+
+
+  // BUTTON NO CONFLICT
+  // ==================
+
+  $.fn.button.noConflict = function () {
+    $.fn.button = old
+    return this
+  }
+
+
+  // BUTTON DATA-API
+  // ===============
+
+  $(document).on('click.bs.button.data-api', '[data-toggle^=button]', function (e) {
+    var $btn = $(e.target)
+    if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
+    $btn.button('toggle')
+    e.preventDefault()
+  })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: carousel.js v3.0.3
+ * http://getbootstrap.com/javascript/#carousel
+ * ========================================================================
+ * Copyright 2013 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+  // CAROUSEL CLASS DEFINITION
+  // =========================
+
+  var Carousel = function (element, options) {
+    this.$element    = $(element)
+    this.$indicators = this.$element.find('.carousel-indicators')
+    this.options     = options
+    this.paused      =
+    this.sliding     =
+    this.interval    =
+    this.$active     =
+    this.$items      = null
+
+    this.options.pause == 'hover' && this.$element
+      .on('mouseenter', $.proxy(this.pause, this))
+      .on('mouseleave', $.proxy(this.cycle, this))
+  }
+
+  Carousel.DEFAULTS = {
+    interval: 5000
+  , pause: 'hover'
+  , wrap: true
+  }
+
+  Carousel.prototype.cycle =  function (e) {
+    e || (this.paused = false)
+
+    this.interval && clearInterval(this.interval)
+
+    this.options.interval
+      && !this.paused
+      && (this.interval = setInterval($.proxy(this.next, this), this.options.interval))
+
+    return this
+  }
+
+  Carousel.prototype.getActiveIndex = function () {
+    this.$active = this.$element.find('.item.active')
+    this.$items  = this.$active.parent().children()
+
+    return this.$items.index(this.$active)
+  }
+
+  Carousel.prototype.to = function (pos) {
+    var that        = this
+    var activeIndex = this.getActiveIndex()
+
+    if (pos > (this.$items.length - 1) || pos < 0) return
+
+    if (this.sliding)       return this.$element.one('slid.bs.carousel', function () { that.to(pos) })
+    if (activeIndex == pos) return this.pause().cycle()
+
+    return this.slide(pos > activeIndex ? 'next' : 'prev', $(this.$items[pos]))
+  }
+
+  Carousel.prototype.pause = function (e) {
+    e || (this.paused = true)
+
+    if (this.$element.find('.next, .prev').length && $.support.transition.end) {
+      this.$element.trigger($.support.transition.end)
+      this.cycle(true)
+    }
+
+    this.interval = clearInterval(this.interval)
+
+    return this
+  }
+
+  Carousel.prototype.next = function () {
+    if (this.sliding) return
+    return this.slide('next')
+  }
+
+  Carousel.prototype.prev = function () {
+    if (this.sliding) return
+    return this.slide('prev')
+  }
+
+  Carousel.prototype.slide = function (type, next) {
+    var $active   = this.$element.find('.item.active')
+    var $next     = next || $active[type]()
+    var isCycling = this.interval
+    var direction = type == 'next' ? 'left' : 'right'
+    var fallback  = type == 'next' ? 'first' : 'last'
+    var that      = this
+
+    if (!$next.length) {
+      if (!this.options.wrap) return
+      $next = this.$element.find('.item')[fallback]()
+    }
+
+    this.sliding = true
+
+    isCycling && this.pause()
+
+    var e = $.Event('slide.bs.carousel', { relatedTarget: $next[0], direction: direction })
+
+    if ($next.hasClass('active')) return
+
+    if (this.$indicators.length) {
+      this.$indicators.find('.active').removeClass('active')
+      this.$element.one('slid.bs.carousel', function () {
+        var $nextIndicator = $(that.$indicators.children()[that.getActiveIndex()])
+        $nextIndicator && $nextIndicator.addClass('active')
+      })
+    }
+
+    if ($.support.transition && this.$element.hasClass('slide')) {
+      this.$element.trigger(e)
+      if (e.isDefaultPrevented()) return
+      $next.addClass(type)
+      $next[0].offsetWidth // force reflow
+      $active.addClass(direction)
+      $next.addClass(direction)
+      $active
+        .one($.support.transition.end, function () {
+          $next.removeClass([type, direction].join(' ')).addClass('active')
+          $active.removeClass(['active', direction].join(' '))
+          that.sliding = false
+          setTimeout(function () { that.$element.trigger('slid.bs.carousel') }, 0)
+        })
+        .emulateTransitionEnd(600)
+    } else {
+      this.$element.trigger(e)
+      if (e.isDefaultPrevented()) return
+      $active.removeClass('active')
+      $next.addClass('active')
+      this.sliding = false
+      this.$element.trigger('slid.bs.carousel')
+    }
+
+    isCycling && this.cycle()
+
+    return this
+  }
+
+
+  // CAROUSEL PLUGIN DEFINITION
+  // ==========================
+
+  var old = $.fn.carousel
+
+  $.fn.carousel = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.carousel')
+      var options = $.extend({}, Carousel.DEFAULTS, $this.data(), typeof option == 'object' && option)
+      var action  = typeof option == 'string' ? option : options.slide
+
+      if (!data) $this.data('bs.carousel', (data = new Carousel(this, options)))
+      if (typeof option == 'number') data.to(option)
+      else if (action) data[action]()
+      else if (options.interval) data.pause().cycle()
+    })
+  }
+
+  $.fn.carousel.Constructor = Carousel
+
+
+  // CAROUSEL NO CONFLICT
+  // ====================
+
+  $.fn.carousel.noConflict = function () {
+    $.fn.carousel = old
+    return this
+  }
+
+
+  // CAROUSEL DATA-API
+  // =================
+
+  $(document).on('click.bs.carousel.data-api', '[data-slide], [data-slide-to]', function (e) {
+    var $this   = $(this), href
+    var $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
+    var options = $.extend({}, $target.data(), $this.data())
+    var slideIndex = $this.attr('data-slide-to')
+    if (slideIndex) options.interval = false
+
+    $target.carousel(options)
+
+    if (slideIndex = $this.attr('data-slide-to')) {
+      $target.data('bs.carousel').to(slideIndex)
+    }
+
+    e.preventDefault()
+  })
+
+  $(window).on('load', function () {
+    $('[data-ride="carousel"]').each(function () {
+      var $carousel = $(this)
+      $carousel.carousel($carousel.data())
+    })
+  })
+
+}(jQuery);
+
+
+
+/* ========================================================================
+ * Bootstrap: modal.js v3.0.3
+ * http://getbootstrap.com/javascript/#modals
+ * ========================================================================
+ * Copyright 2013 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+  // MODAL CLASS DEFINITION
+  // ======================
+
+  var Modal = function (element, options) {
+    this.options   = options
+    this.$element  = $(element)
+    this.$backdrop =
+    this.isShown   = null
+
+    if (this.options.remote) this.$element.load(this.options.remote)
+  }
+
+  Modal.DEFAULTS = {
+      backdrop: true
+    , keyboard: true
+    , show: true
+  }
+
+  Modal.prototype.toggle = function (_relatedTarget) {
+    return this[!this.isShown ? 'show' : 'hide'](_relatedTarget)
+  }
+
+  Modal.prototype.show = function (_relatedTarget) {
+    var that = this
+    var e    = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+
+    this.$element.trigger(e)
+
+    if (this.isShown || e.isDefaultPrevented()) return
+
+    this.isShown = true
+
+    this.escape()
+
+    this.$element.on('click.dismiss.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
+
+    this.backdrop(function () {
+      var transition = $.support.transition && that.$element.hasClass('fade')
+
+      if (!that.$element.parent().length) {
+        that.$element.appendTo(document.body) // don't move modals dom position
+      }
+
+      that.$element.show()
+
+      if (transition) {
+        that.$element[0].offsetWidth // force reflow
+      }
+
+      that.$element
+        .addClass('in')
+        .attr('aria-hidden', false)
+
+      that.enforceFocus()
+
+      var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+
+      transition ?
+        that.$element.find('.modal-dialog') // wait for modal to slide in
+          .one($.support.transition.end, function () {
+            that.$element.focus().trigger(e)
+          })
+          .emulateTransitionEnd(300) :
+        that.$element.focus().trigger(e)
+    })
+  }
+
+  Modal.prototype.hide = function (e) {
+    if (e) e.preventDefault()
+
+    e = $.Event('hide.bs.modal')
+
+    this.$element.trigger(e)
+
+    if (!this.isShown || e.isDefaultPrevented()) return
+
+    this.isShown = false
+
+    this.escape()
+
+    $(document).off('focusin.bs.modal')
+
+    this.$element
+      .removeClass('in')
+      .attr('aria-hidden', true)
+      .off('click.dismiss.modal')
+
+    $.support.transition && this.$element.hasClass('fade') ?
+      this.$element
+        .one($.support.transition.end, $.proxy(this.hideModal, this))
+        .emulateTransitionEnd(300) :
+      this.hideModal()
+  }
+
+  Modal.prototype.enforceFocus = function () {
+    $(document)
+      .off('focusin.bs.modal') // guard against infinite focus loop
+      .on('focusin.bs.modal', $.proxy(function (e) {
+        if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+          this.$element.focus()
+        }
+      }, this))
+  }
+
+  Modal.prototype.escape = function () {
+    if (this.isShown && this.options.keyboard) {
+      this.$element.on('keyup.dismiss.bs.modal', $.proxy(function (e) {
+        e.which == 27 && this.hide()
+      }, this))
+    } else if (!this.isShown) {
+      this.$element.off('keyup.dismiss.bs.modal')
+    }
+  }
+
+  Modal.prototype.hideModal = function () {
+    var that = this
+    this.$element.hide()
+    this.backdrop(function () {
+      that.removeBackdrop()
+      that.$element.trigger('hidden.bs.modal')
+    })
+  }
+
+  Modal.prototype.removeBackdrop = function () {
+    this.$backdrop && this.$backdrop.remove()
+    this.$backdrop = null
+  }
+
+  Modal.prototype.backdrop = function (callback) {
+    var that    = this
+    var animate = this.$element.hasClass('fade') ? 'fade' : ''
+
+    if (this.isShown && this.options.backdrop) {
+      var doAnimate = $.support.transition && animate
+
+      this.$backdrop = $('<div class="modal-backdrop ' + animate + '" />')
+        .appendTo(document.body)
+
+      this.$element.on('click.dismiss.modal', $.proxy(function (e) {
+        if (e.target !== e.currentTarget) return
+        this.options.backdrop == 'static'
+          ? this.$element[0].focus.call(this.$element[0])
+          : this.hide.call(this)
+      }, this))
+
+      if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
+
+      this.$backdrop.addClass('in')
+
+      if (!callback) return
+
+      doAnimate ?
+        this.$backdrop
+          .one($.support.transition.end, callback)
+          .emulateTransitionEnd(150) :
+        callback()
+
+    } else if (!this.isShown && this.$backdrop) {
+      this.$backdrop.removeClass('in')
+
+      $.support.transition && this.$element.hasClass('fade')?
+        this.$backdrop
+          .one($.support.transition.end, callback)
+          .emulateTransitionEnd(150) :
+        callback()
+
+    } else if (callback) {
+      callback()
+    }
+  }
+
+
+  // MODAL PLUGIN DEFINITION
+  // =======================
+
+  var old = $.fn.modal
+
+  $.fn.modal = function (option, _relatedTarget) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.modal')
+      var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
+      if (typeof option == 'string') data[option](_relatedTarget)
+      else if (options.show) data.show(_relatedTarget)
+    })
+  }
+
+  $.fn.modal.Constructor = Modal
+
+
+  // MODAL NO CONFLICT
+  // =================
+
+  $.fn.modal.noConflict = function () {
+    $.fn.modal = old
+    return this
+  }
+
+
+  // MODAL DATA-API
+  // ==============
+
+  $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
+    var $this   = $(this)
+    var href    = $this.attr('href')
+    var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
+    var option  = $target.data('modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+
+    e.preventDefault()
+
+    $target
+      .modal(option, this)
+      .one('hide', function () {
+        $this.is(':visible') && $this.focus()
+      })
+  })
+
+  $(document)
+    .on('show.bs.modal',  '.modal', function () { $(document.body).addClass('modal-open') })
+    .on('hidden.bs.modal', '.modal', function () { $(document.body).removeClass('modal-open') })
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: tooltip.js v3.0.3
+ * http://getbootstrap.com/javascript/#tooltip
+ * Inspired by the original jQuery.tipsy by Jason Frame
+ * ========================================================================
+ * Copyright 2013 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+    // TOOLTIP PUBLIC CLASS DEFINITION
+    // ===============================
+
+    var Tooltip = function (element, options) {
+        this.type       =
+            this.options    =
+                this.enabled    =
+                    this.timeout    =
+                        this.hoverState =
+                            this.$element   = null
+
+        this.init('tooltip', element, options)
+    }
+
+    Tooltip.DEFAULTS = {
+        animation: true
+        , placement: 'top'
+        , selector: false
+        , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+        , trigger: 'hover focus'
+        , title: ''
+        , delay: 0
+        , html: false
+        , container: false
+    }
+
+    Tooltip.prototype.init = function (type, element, options) {
+        this.enabled  = true
+        this.type     = type
+        this.$element = $(element)
+        this.options  = this.getOptions(options)
+
+        var triggers = this.options.trigger.split(' ')
+
+        for (var i = triggers.length; i--;) {
+            var trigger = triggers[i]
+
+            if (trigger == 'click') {
+                this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
+            } else if (trigger != 'manual') {
+                var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focus'
+                var eventOut = trigger == 'hover' ? 'mouseleave' : 'blur'
+
+                this.$element.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+                this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
+            }
+        }
+
+        this.options.selector ?
+            (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+            this.fixTitle()
+    }
+
+    Tooltip.prototype.getDefaults = function () {
+        return Tooltip.DEFAULTS
+    }
+
+    Tooltip.prototype.getOptions = function (options) {
+        options = $.extend({}, this.getDefaults(), this.$element.data(), options)
+
+        if (options.delay && typeof options.delay == 'number') {
+            options.delay = {
+                show: options.delay
+                , hide: options.delay
+            }
+        }
+
+        return options
+    }
+
+    Tooltip.prototype.getDelegateOptions = function () {
+        var options  = {}
+        var defaults = this.getDefaults()
+
+        this._options && $.each(this._options, function (key, value) {
+            if (defaults[key] != value) options[key] = value
+        })
+
+        return options
+    }
+
+    Tooltip.prototype.enter = function (obj) {
+        var self = obj instanceof this.constructor ?
+            obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+
+        clearTimeout(self.timeout)
+
+        self.hoverState = 'in'
+
+        if (!self.options.delay || !self.options.delay.show) return self.show()
+
+        self.timeout = setTimeout(function () {
+            if (self.hoverState == 'in') self.show()
+        }, self.options.delay.show)
+    }
+
+    Tooltip.prototype.leave = function (obj) {
+        var self = obj instanceof this.constructor ?
+            obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type)
+
+        clearTimeout(self.timeout)
+
+        self.hoverState = 'out'
+
+        if (!self.options.delay || !self.options.delay.hide) return self.hide()
+
+        self.timeout = setTimeout(function () {
+            if (self.hoverState == 'out') self.hide()
+        }, self.options.delay.hide)
+    }
+
+    Tooltip.prototype.show = function () {
+        var e = $.Event('show.bs.'+ this.type)
+
+        if (this.hasContent() && this.enabled) {
+            this.$element.trigger(e)
+
+            if (e.isDefaultPrevented()) return
+
+            var $tip = this.tip()
+
+            this.setContent()
+
+            if (this.options.animation) $tip.addClass('fade')
+
+            var placement = typeof this.options.placement == 'function' ?
+                this.options.placement.call(this, $tip[0], this.$element[0]) :
+                this.options.placement
+
+            var autoToken = /\s?auto?\s?/i
+            var autoPlace = autoToken.test(placement)
+            if (autoPlace) placement = placement.replace(autoToken, '') || 'top'
+
+            $tip
+                .detach()
+                .css({ top: 0, left: 0, display: 'block' })
+                .addClass(placement)
+
+            this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+
+            var pos          = this.getPosition()
+            var actualWidth  = $tip[0].offsetWidth
+            var actualHeight = $tip[0].offsetHeight
+
+            if (autoPlace) {
+                var $parent = this.$element.parent()
+
+                var orgPlacement = placement
+                var docScroll    = document.documentElement.scrollTop || document.body.scrollTop
+                var parentWidth  = this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
+                var parentHeight = this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
+                var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
+
+                placement = placement == 'bottom' && pos.top   + pos.height  + actualHeight - docScroll > parentHeight  ? 'top'    :
+                    placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
+                        placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
+                            placement == 'left'   && pos.left  - actualWidth < parentLeft                               ? 'right'  :
+                                placement
+
+                $tip
+                    .removeClass(orgPlacement)
+                    .addClass(placement)
+            }
+
+            var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
+
+            this.applyPlacement(calculatedOffset, placement)
+            this.$element.trigger('shown.bs.' + this.type)
+        }
+    }
+
+    Tooltip.prototype.applyPlacement = function(offset, placement) {
+        var replace
+        var $tip   = this.tip()
+        var width  = $tip[0].offsetWidth
+        var height = $tip[0].offsetHeight
+
+        // manually read margins because getBoundingClientRect includes difference
+        var marginTop = parseInt($tip.css('margin-top'), 10)
+        var marginLeft = parseInt($tip.css('margin-left'), 10)
+
+        // we must check for NaN for ie 8/9
+        if (isNaN(marginTop))  marginTop  = 0
+        if (isNaN(marginLeft)) marginLeft = 0
+
+        offset.top  = offset.top  + marginTop
+        offset.left = offset.left + marginLeft
+
+        $tip
+            .offset(offset)
+            .addClass('in')
+
+        // check to see if placing tip in new offset caused the tip to resize itself
+        var actualWidth  = $tip[0].offsetWidth
+        var actualHeight = $tip[0].offsetHeight
+
+        if (placement == 'top' && actualHeight != height) {
+            replace = true
+            offset.top = offset.top + height - actualHeight
+        }
+
+        if (/bottom|top/.test(placement)) {
+            var delta = 0
+
+            if (offset.left < 0) {
+                delta       = offset.left * -2
+                offset.left = 0
+
+                $tip.offset(offset)
+
+                actualWidth  = $tip[0].offsetWidth
+                actualHeight = $tip[0].offsetHeight
+            }
+
+            this.replaceArrow(delta - width + actualWidth, actualWidth, 'left')
+        } else {
+            this.replaceArrow(actualHeight - height, actualHeight, 'top')
+        }
+
+        if (replace) $tip.offset(offset)
+    }
+
+    Tooltip.prototype.replaceArrow = function(delta, dimension, position) {
+        this.arrow().css(position, delta ? (50 * (1 - delta / dimension) + "%") : '')
+    }
+
+    Tooltip.prototype.setContent = function () {
+        var $tip  = this.tip()
+        var title = this.getTitle()
+
+        $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
+        $tip.removeClass('fade in top bottom left right')
+    }
+
+    Tooltip.prototype.hide = function () {
+        var that = this
+        var $tip = this.tip()
+        var e    = $.Event('hide.bs.' + this.type)
+
+        function complete() {
+            if (that.hoverState != 'in') $tip.detach()
+        }
+
+        this.$element.trigger(e)
+
+        if (e.isDefaultPrevented()) return
+
+        $tip.removeClass('in')
+
+        $.support.transition && this.$tip.hasClass('fade') ?
+            $tip
+                .one($.support.transition.end, complete)
+                .emulateTransitionEnd(150) :
+            complete()
+
+        this.$element.trigger('hidden.bs.' + this.type)
+
+        return this
+    }
+
+    Tooltip.prototype.fixTitle = function () {
+        var $e = this.$element
+        if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+            $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
+        }
+    }
+
+    Tooltip.prototype.hasContent = function () {
+        return this.getTitle()
+    }
+
+    Tooltip.prototype.getPosition = function () {
+        var el = this.$element[0]
+        return $.extend({}, (typeof el.getBoundingClientRect == 'function') ? el.getBoundingClientRect() : {
+            width: el.offsetWidth
+            , height: el.offsetHeight
+        }, this.$element.offset())
+    }
+
+    Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
+        return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2  } :
+            placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2  } :
+                placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
+                    /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width   }
+    }
+
+    Tooltip.prototype.getTitle = function () {
+        var title
+        var $e = this.$element
+        var o  = this.options
+
+        title = $e.attr('data-original-title')
+            || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+        return title
+    }
+
+    Tooltip.prototype.tip = function () {
+        return this.$tip = this.$tip || $(this.options.template)
+    }
+
+    Tooltip.prototype.arrow = function () {
+        return this.$arrow = this.$arrow || this.tip().find('.tooltip-arrow')
+    }
+
+    Tooltip.prototype.validate = function () {
+        if (!this.$element[0].parentNode) {
+            this.hide()
+            this.$element = null
+            this.options  = null
+        }
+    }
+
+    Tooltip.prototype.enable = function () {
+        this.enabled = true
+    }
+
+    Tooltip.prototype.disable = function () {
+        this.enabled = false
+    }
+
+    Tooltip.prototype.toggleEnabled = function () {
+        this.enabled = !this.enabled
+    }
+
+    Tooltip.prototype.toggle = function (e) {
+        var self = e ? $(e.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type) : this
+        self.tip().hasClass('in') ? self.leave(self) : self.enter(self)
+    }
+
+    Tooltip.prototype.destroy = function () {
+        this.hide().$element.off('.' + this.type).removeData('bs.' + this.type)
+    }
+
+
+    // TOOLTIP PLUGIN DEFINITION
+    // =========================
+
+    var old = $.fn.tooltip
+
+    $.fn.tooltip = function (option) {
+        return this.each(function () {
+            var $this   = $(this)
+            var data    = $this.data('bs.tooltip')
+            var options = typeof option == 'object' && option
+
+            if (!data) $this.data('bs.tooltip', (data = new Tooltip(this, options)))
+            if (typeof option == 'string') data[option]()
+        })
+    }
+
+    $.fn.tooltip.Constructor = Tooltip
+
+
+    // TOOLTIP NO CONFLICT
+    // ===================
+
+    $.fn.tooltip.noConflict = function () {
+        $.fn.tooltip = old
+        return this
+    }
+
+}(jQuery);
+
+/* ========================================================================
+ * Bootstrap: popover.js v3.0.3
+ * http://getbootstrap.com/javascript/#popovers
+ * ========================================================================
+ * Copyright 2013 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+  // POPOVER PUBLIC CLASS DEFINITION
+  // ===============================
+
+  var Popover = function (element, options) {
+    this.init('popover', element, options)
+  }
+
+  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
+
+  Popover.DEFAULTS = $.extend({} , $.fn.tooltip.Constructor.DEFAULTS, {
+    placement: 'right'
+  , trigger: 'click'
+  , content: ''
+  , template: '<div class="popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+  })
+
+
+  // NOTE: POPOVER EXTENDS tooltip.js
+  // ================================
+
+  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
+
+  Popover.prototype.constructor = Popover
+
+  Popover.prototype.getDefaults = function () {
+    return Popover.DEFAULTS
+  }
+
+  Popover.prototype.setContent = function () {
+    var $tip    = this.tip()
+    var title   = this.getTitle()
+    var content = this.getContent()
+
+    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
+    $tip.find('.popover-content')[this.options.html ? 'html' : 'text'](content)
+
+    $tip.removeClass('fade top bottom left right in')
+
+    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
+    // this manually by checking the contents.
+    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
+  }
+
+  Popover.prototype.hasContent = function () {
+    return this.getTitle() || this.getContent()
+  }
+
+  Popover.prototype.getContent = function () {
+    var $e = this.$element
+    var o  = this.options
+
+    return $e.attr('data-content')
+      || (typeof o.content == 'function' ?
+            o.content.call($e[0]) :
+            o.content)
+  }
+
+  Popover.prototype.arrow = function () {
+    return this.$arrow = this.$arrow || this.tip().find('.arrow')
+  }
+
+  Popover.prototype.tip = function () {
+    if (!this.$tip) this.$tip = $(this.options.template)
+    return this.$tip
+  }
+
+
+  // POPOVER PLUGIN DEFINITION
+  // =========================
+
+  var old = $.fn.popover
+
+  $.fn.popover = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.popover')
+      var options = typeof option == 'object' && option
+
+      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.popover.Constructor = Popover
+
+
+  // POPOVER NO CONFLICT
+  // ===================
+
+  $.fn.popover.noConflict = function () {
+    $.fn.popover = old
+    return this
+  }
+
+}(jQuery);
+/* ========================================================================
+ * Bootstrap: collapse.js v3.0.3
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2013 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+
++function ($) { "use strict";
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.transitioning = null
+
+    if (this.options.parent) this.$parent = $(this.options.parent)
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var actives = this.$parent && this.$parent.find('> .panel > .in')
+
+    if (actives && actives.length) {
+      var hasData = actives.data('bs.collapse')
+      if (hasData && hasData.transitioning) return
+      actives.collapse('hide')
+      hasData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')
+      [dimension](0)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('in')
+        [dimension]('auto')
+      this.transitioning = 0
+      this.$element.trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one($.support.transition.end, $.proxy(complete, this))
+      .emulateTransitionEnd(350)
+      [dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element
+      [dimension](this.$element[dimension]())
+      [0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse')
+      .removeClass('in')
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .trigger('hidden.bs.collapse')
+        .removeClass('collapsing')
+        .addClass('collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one($.support.transition.end, $.proxy(complete, this))
+      .emulateTransitionEnd(350)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  var old = $.fn.collapse
+
+  $.fn.collapse = function (option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle=collapse]', function (e) {
+    var $this   = $(this), href
+    var target  = $this.attr('data-target')
+        || e.preventDefault()
+        || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7
+    var $target = $(target)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+    var parent  = $this.attr('data-parent')
+    var $parent = parent && $(parent)
+
+    if (!data || !data.transitioning) {
+      if ($parent) $parent.find('[data-toggle=collapse][data-parent="' + parent + '"]').not($this).addClass('collapsed')
+      $this[$target.hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
+    }
+
+    $target.collapse(option)
+  })
+
+}(jQuery);(function($) {
+	$.alerts = {
+		verticalOffset : -75, 
+		horizontalOffset : 0,
+		repositionOnResize : true, 
+		overlayOpacity : 0.3, 
+		overlayColor : '#333', 
+		draggable : true, 
+		okButton : '&nbsp;确定&nbsp;', 
+		cancelButton : '&nbsp;取消&nbsp;', 
+		dialogClass : null, 
+
+		alert : function(message, title, callback, btnText) {
+			if (title == null)
+				title = '';
+			$.alerts._show(title, message, null, 'alert', btnText, null, function(result) {
+				if (callback)
+					callback(result);
+			});
+		},
+
+		confirm : function(message, title, callback, lBtnText, rBtnText) {
+			if (title == null)
+				title = '';
+			$.alerts._show(title, message, null, 'confirm', lBtnText, rBtnText, function(result) {
+				if (callback)
+					callback(result);
+			});
+		},
+
+		_show : function(title, msg, value, type, lBtnText, rBtnText, callback) {
+			if(null == lBtnText || lBtnText.length == 0){
+				lBtnText = $.alerts.okButton;
+			}
+			if(null == rBtnText || rBtnText.length == 0){
+				rBtnText = $.alerts.cancelButton;
+			}
+			$.alerts._hide();
+			$.alerts._overlay('show');
+			var html = '<div id="popup_container" class="modal fade in" style="display:block;"><div class="modal-dialog"><div class="modal-content">';
+			if(title == null || title.length == 0){
+				html += '<div id="popup_info" class="modal-header text-center"><h4 id="popup_message"></h4></div>';
+			}else{
+				html += '<div class="modal-header text-center" style="padding: 10px 20px 0px 20px;"><h4 id="popup_title"></h4></div>'
+						+ '<div id="popup_info" class="modal-body text-center" style="padding: 0px 20px 10px 20px;"><span id="popup_message"></span></div>';	
+			}
+			html += '</div></div></div>';
+			$("BODY").append(html);
+			if(title != null && title.length > 0){
+				$("#popup_title").text(title);			
+			}
+			$("#popup_message").text(msg);
+			$("#popup_message").html($("#popup_message").text().replace(/\n/g, '<br />'));
+			$.alerts._maintainPosition(true);
+			switch (type) {
+			case 'alert':
+				$("#popup_info").after(
+						'<div id="popup_panel" class="modal-footer text-center"><span id="popup_ok" class="btn btn-warning">'
+							+ lBtnText +'</span></div>');
+				$("#popup_ok").click(function() {
+					$.alerts._hide();
+					callback(true);
+				});
+				$("#popup_ok").focus().keypress(function(e) {
+					if (e.keyCode == 13 || e.keyCode == 27)
+						$("#popup_ok").trigger('click');
+				});
+				break;
+			case 'confirm':
+				$("#popup_info").after(
+						'<div id="popup_panel" class="modal-footer text-center"><span id="popup_ok" class="btn btn-warning">'
+							+ lBtnText +'</span><span id="popup_cancel" class="btn btn-default">'
+							+ rBtnText +'</span></div>');
+				$("#popup_ok").click(function() {
+					$.alerts._hide();
+					if (callback)
+						callback(true);
+				});
+				$("#popup_cancel").click(function() {
+					$.alerts._hide();
+					if (callback)
+						callback(false);
+				});
+				$("#popup_ok").focus();
+				$("#popup_ok, #popup_cancel").keypress(function(e) {
+					if (e.keyCode == 13)
+						$("#popup_ok").trigger('click');
+					if (e.keyCode == 27)
+						$("#popup_cancel").trigger('click');
+				});
+				break;
+			}
+			if ($.alerts.draggable) {
+				try {
+					$("#popup_container").draggable({
+						handle : $("#popup_title")
+					});
+					$("#popup_title").css({
+						cursor : 'move'
+					});
+				} catch (e) { 
+				}
+			}
+		},
+
+		_hide : function() {
+			$("#popup_container").remove();
+			$.alerts._overlay('hide');
+			$.alerts._maintainPosition(false);
+		},
+
+		_overlay : function(status) {
+			switch (status) {
+			case 'show':
+				$.alerts._overlay('hide');
+				$("BODY").append('<div id="popup_overlay" class="modal-backdrop fade in"></div>');
+				break;
+			case 'hide':
+				$("#popup_overlay").remove();
+				break;
+			}
+		},
+
+		_maintainPosition : function(status) {
+			if ($.alerts.repositionOnResize) {
+				switch (status) {
+				case true:
+					$(window).bind('resize', function() {
+					});
+					break;
+				case false:
+					$(window).unbind('resize');
+					break;
+				}
+			}
+		}
+
+	};
+
+	jAlert = function(message, title, callback, btnText) {
+		$.alerts.alert(message, title, callback, btnText);
+	};
+
+	jConfirm = function(message, title, callback, lBtnText, rBtnText) {
+		$.alerts.confirm(message, title, callback, lBtnText, rBtnText);
+	};
+
+})(jQuery);
+//获取浏览器内核信息
+var browser={
+versions:function(){
+var u = navigator.userAgent, app = navigator.appVersion;
+return {
+trident: u.indexOf('Trident') > -1, //IE内核
+presto: u.indexOf('Presto') > -1, //opera内核
+webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+mobile: !!u.match(/AppleWebKit.*Mobile.*/)||!!u.match(/AppleWebKit/), //是否为移动终端
+ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+iPad: u.indexOf('iPad') > -1, //是否iPad
+webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+};
+}()
+} 
+
+function do_app_download(){
+if(browser.versions.ios == true || browser.versions.iPhone ==true || browser.versions.iPad == true){
+window.location.href='https://lnk0.com/cc8oE9';
+} else if(browser.versions.android == true){
+window.location.href='http://m.111.com.cn/mobile/main-yaowang_yidong10086-release.apk';
+}else{
+window.location.href='/m';
+}
+} $('.talk_link').click(function() {
+	$(this).toggleClass('btn_link_dis');
+	$('.talk_ul').toggleClass('open');
+	$('.talk_bg').toggle();
+});
+$('.talk_bg').click(function() {
+	$('.btn_talk').toggleClass('btn_link_dis')
+	$('.talk_ul').toggleClass('open');
+	$('.talk_bg').toggle();
+});
+function Map() {
+ var struct = function(key, value) {
+  this.key = key;
+  this.value = value;
+ }
+ 
+ var put = function(key, value){
+  for (var i = 0; i < this.arr.length; i++) {
+   if ( this.arr[i].key === key ) {
+    this.arr[i].value = value;
+    return;
+   }
+  }
+   this.arr[this.arr.length] = new struct(key, value);
+ }
+ 
+ var get = function(key) {
+  for (var i = 0; i < this.arr.length; i++) {
+   if ( this.arr[i].key === key ) {
+     return this.arr[i].value;
+   }
+  }
+  return null;
+ }
+ 
+ var remove = function(key) {
+  var v;
+  for (var i = 0; i < this.arr.length; i++) {
+   v = this.arr.pop();
+   if ( v.key === key ) {
+    continue;
+   }
+   this.arr.unshift(v);
+  }
+ }
+ 
+ var size = function() {
+  return this.arr.length;
+ }
+ 
+ var isEmpty = function() {
+  return this.arr.length <= 0;
+ }
+
+ this.arr = new Array();
+ this.get = get;
+ this.put = put;
+ this.remove = remove;
+ this.size = size;
+ this.isEmpty = isEmpty;
+}
+
+
+var map = new Map();
+//map.put("971266","10");//肿瘤
+//map.put("965204","10");//内分泌
+//map.put("965163","10");//妇科疾病
+//map.put("971267","11");//肝病科
+//map.put("965147","11");// 消化系统疾病
+//map.put("953757","13");//心脑血管
+//map.put("953742","14");//神经系统
+//map.put("965171","14");//风湿骨科
+//map.put("965155","17");//皮肤病
+//map.put("965193","17");//五官科疾病
+//map.put("0","4");//默认为全科药师
+map.put("971267","11");//肝病科
+map.put("965155","11");//皮肤病
+map.put("965147","11");// 消化系统疾病
+map.put("953757","14");//心脑血管
+map.put("953742","14");//神经系统
+map.put("965171","14");//风湿骨科
+map.put("971266","10");//肿瘤科
+map.put("965178","10");//呼吸道疾病
+map.put("953783","4");//滋养调补疾病
+map.put("965141","4");//男科疾病
+map.put("965163","4");//妇科疾病
+map.put("965193","4");//五官科疾病
+map.put("965204","4");//内分泌
+map.put("0","4");//默认为全科药师
+map.put("-1","20");//商城售前
+map.put("-2","21");//商城售后
+function getGroupId(category){
+	return map.get(category)
+}
+function redirect2dkb(category) {
+	var result = getGroupId(category);
+	if(result) {
+		Detector.floatclick(result)
+	}else{
+        Detector.floatclick('4')
+    }
+}
+function dkbCountShow(){
+	var str = jQuery.cookie("DKB_Other");
+	if(str!=""  && str!=null  && str !="null" ){
+		var strs =  str.split(",");
+    	var depid = strs[0];
+    	var dkb_count = jQuery.cookie("DKB_Count");
+    	if(dkb_count>0){
+    		$(".dkb_id").css("display","block").text(dkb_count);
+			$("#dkb > li > a > span > i").each(function(i){
+            	$(this).css("display","none").text(0);
+			});	
+			$("#dkb > li > a > span > i").each(function(i){
+				if(i+1==depid){
+					if(depid ==1 ){
+            			$(".dkb_id_pre_sales").css("display","block").text(dkb_count);
+    				}
+    				if(depid ==2 ){
+            			$(".dkb_id_group").css("display","block").text(dkb_count);
+    				}
+    				if(depid ==3 ){
+            			$(".dkb_id_cus_service").css("display","block").text(dkb_count);
+    				}
+    				if(depid ==4 ){
+            			$(".dkb_id_doctor").css("display","block").text(dkb_count);
+    				}
+				}
+            })
+    	}else{
+    		$("#dkb > li > a > span > i").each(function(i){
+            	$(this).css("display","none").text("0");
+			});	
+			$(".dkb_id").css("display","none").text("0");
+		}
+	}else{
+		$("#dkb > li > a > span > i").each(function(i){
+        	$(this).css("display","none").text("0");
+		});	
+		$(".dkb_id").css("display","none").text("0");
+	}
+}
+
+$(function(){
+	$("#dkb>li>a").click(function(){
+		jQuery.cookie("DKB_Other","",{ path: '/' ,domain:'111.com.cn' });
+		jQuery.cookie("DKB_Count","0",{ path: '/' ,domain:'111.com.cn' });
+	});
+	dkbCountShow();
+	setInterval("dkbCountShow()",5000);
+}); 
+function goHome(){
+	var sourceUrl=$.cookie("sourceUrl");
+	if(sourceUrl==null  || sourceUrl==""){
+		window.location.href="http://m.111.com.cn";
+	}else{
+		$.cookie('sourceUrl', null, {path:'/', domain: '.111.com.cn'});
+		window.location.href=sourceUrl;
+	}
+}
+String.prototype.startWith=function(str){
+	if(str==null||str==""||this.length==0||str.length>this.length)
+	  return false;
+	if(this.substr(0,str.length)==str)
+	  return true;
+	else
+	  return false;
+	return true;
+};
+String.prototype.endWith=function(str){
+	if(str==null||str==""||this.length==0||str.length>this.length)
+	  return false;
+	if(this.substring(this.length-str.length)==str)
+	  return true;
+	else
+	  return false;
+	return true;
+};
+function imgError(obj,pic){
+ obj.src='http://p3.maiyaole.com/images/'+pic;
+ obj.onerror = null;
+}
+function flyToCart(fromDom,destinationId){
+	if(fromDom == null){
+		$(".btm_cart i").text(countCart());
+		return;
+	}
+	var flyElm = fromDom.clone().css('opacity','0.7').addClass("clone");
+	flyElm.css({
+		'z-index': 9000,
+		'display': 'block',
+		'position': 'absolute',
+		'top': fromDom.offset().top +'px',
+		'left': fromDom.offset().left +'px',
+		'width': fromDom.width() +'px',
+		'height': fromDom.height() +'px'
+	});
+	$('body').append(flyElm);
+	flyElm.animate({
+		top:$('#'+destinationId).offset().top,
+		left:$('#'+destinationId).offset().left,
+		width:30,
+		height:30,
+	},800,function(){
+			$(".clone").remove();
+			$("#"+destinationId).find("i").text(countCart());
+			$(".btm_cart i").text(countCart());
+		});
+}
+$(".p_top").click(function(e){
+	var open = $(".talk-bottom > ul");
+	if(open.length>0){
+		$(".talk_link").removeClass('btn_link_dis');
+		$('.talk_ul').removeClass('open');
+        $('.talk_bg').hide();
+	}
+	e.preventDefault();
+	$(document.documentElement).animate({
+	    scrollTop: 0
+    	},200);
+    $(document.body).animate({
+        scrollTop: 0
+        },200);
+});
+$(function() {
+	var topBtn = $('.p_top');
+	topBtn.hide();
+	$(window).scroll(function () {
+		if($("#search_div").is(":hidden")){
+			if ($(this).scrollTop() > 100) {
+				topBtn.fadeIn();
+			} else {
+				topBtn.fadeOut();
+			}
+		}
+	});
+	$(".navi_btn a").click(function(e) {
+		$(this).parent().next().slideToggle();
+		return false;
+	});
+	$("body").click(function(e){
+		$(".navi_box").slideUp();
+	});
+	//兼容safari下click事件不触发
+    $("body").unbind("touchend").bind("touchend",function(){
+        $(".navi_box").slideUp();
+    });
+});
+function getMailAddress(mailTail){
+	var address = "";
+    $.ajax({  
+        url: 'http://s.maiyaole.com/js/wap/json/mail.json',  
+        type: 'GET',  
+        dataType: 'json',  
+        async:false,  
+        success: function(data){  
+        	$.each(data,function(Index,info){
+   			  if(info["tail"] == mailTail){
+   				 address = info["value"];
+   				 return false;
+   			  }
+            });
+        }  
+    });  
+    $.ajaxSettings.async = false;  
+	return address;
+}
+/**
+ * 验证图片验证码
+ * @param obj
+ * @param baseUrl
+ * @param userName
+ * @param picCode
+ */
+function validatePicCode(obj,baseUrl,userName, picCode){
+	$.ajax({  
+        url: "http://" + baseUrl + "/validate/validatePictureCode.action?userName="+userName+"&picCode="+picCode,  
+        type: 'post',  
+        dataType: 'text',  
+        async:false,  
+        success: function(data){  
+        	if(data=='success'){
+        		obj.addClass("input_ok");
+        		obj.removeClass("input_error");
+        	}else{
+        		obj.addClass("input_error");
+        		obj.removeClass("input_ok");
+        	}
+        }  
+    });  
+}
+/**
+ * 验证手机验证码
+ * @param obj
+ * @param baseUrl
+ * @param userName
+ * @param picCode
+ */
+function validatePhoneCode(obj,baseUrl,phone, phoneCode){
+	$.ajax({  
+        url: "http://" + baseUrl + "/validate/validatePhoneCode.action?phone="+phone+"&phoneCode="+phoneCode,  
+        type: 'post',  
+        dataType: 'text',  
+        async:false,  
+        success: function(data){  
+        	if(data=='success'){
+        		obj.addClass("input_ok");
+        		obj.removeClass("input_error");
+        	}else{
+        		obj.addClass("input_error");
+        		obj.removeClass("input_ok");
+        	}
+        }  
+    });  
+}
+/**
+ * 判断字符串是否为空
+ */
+function isEmpty(str){
+	if(null == str || str.replace(/[ ]/g, "").length == 0) {
+		return true;
+	}
+	return false;
+};
+function businessLocation(keyword){
+	var specialUrls = {
+			'体检':{'url':'http://m.111.com.cn/list/964286-0-0-0-0-0-0-1.html'},
+			'健康体检':{'url':'http://m.111.com.cn/list/968135-0-0-0-0-0-0-1.html'},
+			'体检卡':{'url':'http://m.111.com.cn/list/964286-0-0-0-0-0-0-1.html'},
+			'体检套餐':{'url':'http://m.111.com.cn/list/964286-0-0-0-0-0-0-1.html'},
+			'口腔检查':{'url':'http://m.111.com.cn/list/969195-0-0-0-0-0-0-1.html'},
+			'中老年体检':{'url':'http://m.111.com.cn/list/968136-0-0-0-0-0-0-1.html'},
+			'青年体检':{'url':'http://m.111.com.cn/list/968137-0-0-0-0-0-0-1.html'},
+			'通用体检':{'url':'http://m.111.com.cn/list/968138-0-0-0-0-0-0-1.html'},
+			'美年体检':{'url':'http://m.111.com.cn/list/968135-938812-0-0-0-0-0-1.html'},
+			'爱康国宾':{'url':'http://m.111.com.cn/list/968135-938643-0-0-0-0-0-1.html'},
+			'爱康国宾体检':{'url':'http://m.111.com.cn/list/968135-938643-0-0-0-0-0-1.html'},
+			'上远齿科':{'url':'http://m.111.com.cn/list/969195-926828-0-0-0-0-0-1.html'},
+			'瑞慈体检':{'url':'http://m.111.com.cn/list/968135-961114-0-0-0-0-0-1.html'},
+			'慈铭体检':{'url':'http://m.111.com.cn/list/968135-925388-0-0-0-0-0-1.html'},
+			'小儿纸尿裤':{'url':'http://m.111.com.cn/list/956494-0-0-0-0-0-0-1.html'},
+			'西洋参':{'url':'http://m.111.com.cn/list/954707-0-0-0-0-0-0-1.html'},	
+			'体温计':{'url':'http://m.111.com.cn/list/965258-0-0-0-0-0-0-1.html'},
+			'制氧机':{'url':'http://m.111.com.cn/list/956662-0-0-0-0-0-0-1.html'},
+			'胰岛素':{'url':'http://m.111.com.cn/list/971365-0-0-0-0-0-0-1.html'},
+			'儿童感冒':{'url':'http://m.111.com.cn/list/969596-0-0-0-0-0-0-1.html'},
+			'儿童肠胃用药':{'url':'http://m.111.com.cn/list/969595-0-0-0-0-0-0-1.html'},
+			'小儿感冒':{'url':'http://m.111.com.cn/list/969596-0-0-0-0-0-0-1.html'},
+			'小儿肠胃用药':{'url':'http://m.111.com.cn/list/969595-0-0-0-0-0-0-1.html'},
+			'眼药水':{'url':'http://m.111.com.cn/list/965195-0-0-0-0-0-0-1.html'},
+			'感冒药':{'url':'http://m.111.com.cn/list/965178-0-0-0-0-0-0-1.html'},
+			'鼻炎':{'url':'http://m.111.com.cn/list/965200-0-0-0-0-0-0-1.html'},
+			'消炎药':{'url':'http://m.111.com.cn/list/965185-0-0-0-0-0-0-1.html'},
+			'避孕套':{'url':'http://m.111.com.cn/list/965326-0-0-0-0-0-0-1.html'},
+			'感冒':{'url':'http://m.111.com.cn/list/965178-0-0-0-0-0-0-1.html'},
+			'西洋参':{'url':'http://m.111.com.cn/list/954707-0-0-0-0-0-0-1.html'},
+			'孕妇维生素':{'url':'http://m.111.com.cn/list/963413-0-2_91259_122826-0-0-0-0-1.html'},
+			'叶酸':{'url':'http://m.111.com.cn/list/963431-0-0-0-0-0-0-1.html'},
+			'鱼肝油':{'url':'http://m.111.com.cn/list/971385-0-0-0-0-0-0-1.html'},
+			'钙片':{'url':'http://m.111.com.cn/list/963422-0-0-0-0-0-0-1.html'},
+			'叶酸片':{'url':'http://m.111.com.cn/list/963431-0-0-0-0-0-0-1.html'},
+			'DHA':{'url':'http://m.111.com.cn/list/971437-0-0-0-0-0-0-1.html'},
+			'维生素C':{'url':'http://m.111.com.cn/list/963419-0-0-0-0-0-0-1.html'},
+			'小儿钙':{'url':'http://m.111.com.cn/list/963422-0-2_91524_128381-0-0-0-0-1.html'},
+			'钙':{'url':'http://m.111.com.cn/list/963422-0-0-0-0-0-0-1.html'},
+			'玛卡':{'url':'http://m.111.com.cn/list/971412-0-0-0-0-0-0-1.html'},
+			'维生素E':{'url':'http://m.111.com.cn/list/963418-0-0-0-0-0-0-1.html'},
+			'维生素':{'url':'http://m.111.com.cn/list/963413-0-0-0-0-0-0-1.html'},
+			'维生素B':{'url':'http://m.111.com.cn/list/963415-0-0-0-0-0-0-1.html'},
+			'维生素B6':{'url':'http://m.111.com.cn/list/963415-0-0-0-0-0-0-1.html'},
+			'维生素AD':{'url':'http://m.111.com.cn/list/963414-0-0-0-0-0-0-1.html'},
+			'鱼油':{'url':'http://m.111.com.cn/list/971384-0-0-0-0-0-0-1.html'},
+			'奶粉':{'url':'http://m.111.com.cn/list/971381-0-0-0-0-0-0-1.html'},
+			'润喉糖':{'url':'http://m.111.com.cn/list/971435-0-0-0-0-0-0-1.html'},
+			'胶原蛋白':{'url':'http://m.111.com.cn/list/971427-0-0-0-0-0-0-1.html'},
+			'保健茶':{'url':'http://m.111.com.cn/list/971438-0-0-0-0-0-0-1.html'},
+			'左旋肉碱':{'url':'http://m.111.com.cn/list/971434-0-0-0-0-0-0-1.html'},
+			'益生菌':{'url':'http://m.111.com.cn/list/971433-0-0-0-0-0-0-1.html'},
+			'卵磷脂':{'url':'http://m.111.com.cn/list/971422-0-0-0-0-0-0-1.html'},
+			'花旗参':{'url':'http://m.111.com.cn/list/971391-0-0-0-0-0-0-1.html'},
+			'隐形眼镜盒':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'隐形眼镜日抛':{'url':'http://m.111.com.cn/list/960464-0-1_93279_137835-0-0-0-0-1.html'},
+			'隐形眼镜月抛':{'url':'http://m.111.com.cn/list/960464-0-1_93279_137837-0-0-0-0-1.html'},
+			'眼镜盒':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'隐形眼镜伴侣盒':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'隐形眼镜盒子':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'隐形眼镜 护理':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'隐形眼镜清洗盒':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'隐形眼镜双联盒':{'url':'http://m.111.com.cn/list/965320-0-0-0-0-0-0-1.html'},
+			'强生美瞳隐形眼镜':{'url':'http://m.111.com.cn/list/965284-68-0-0-0-0-0-1.html'},
+			'强生美瞳':{'url':'http://m.111.com.cn/list/965284-68-0-0-0-0-0-1.html'},
+			'美瞳':{'url':'http://m.111.com.cn/list/965284-0-0-0-0-0-0-1.html'},
+			'彩色隐形眼镜':{'url':'http://m.111.com.cn/list/965284-0-0-0-0-0-0-1.html'},
+			'美瞳 隐形眼镜':{'url':'http://m.111.com.cn/list/965284-0-0-0-0-0-0-1.html'},
+			'隐形眼镜 彩色':{'url':'http://m.111.com.cn/list/965284-0-0-0-0-0-0-1.html'},
+			'海昌隐形眼镜护理液':{'url':'http://m.111.com.cn/list/960472-924058-0-0-0-0-0-1.html'},
+			'博士伦护理液':{'url':'http://m.111.com.cn/list/960472-900313-0-0-0-0-0-1.html'},
+			'博士伦 护理液':{'url':'http://m.111.com.cn/list/960472-900313-0-0-0-0-0-1.html'},
+			'隐形眼镜护理液':{'url':'http://m.111.com.cn/list/960472-0-0-0-0-0-0-1.html'},
+			'护理液':{'url':'http://m.111.com.cn/list/960472-0-0-0-0-0-0-1.html'},
+			'隐形眼镜 护理液':{'url':'http://m.111.com.cn/list/960472-0-0-0-0-0-0-1.html'},
+			'隐形眼镜护理':{'url':'http://m.111.com.cn/list/960472-0-0-0-0-0-0-1.html'},
+			'菲士康':{'url':'http://m.111.com.cn/list/960464-947250-0-0-0-0-0-1.html'},
+			'geo':{'url':'http://m.111.com.cn/list/960464-927612-0-0-0-0-0-1.html'},
+			'科莱博':{'url':'http://m.111.com.cn/list/960464-924602-0-0-0-0-0-1.html'},
+			'卫康':{'url':'http://m.111.com.cn/list/960464-924059-0-0-0-0-0-1.html'},
+			'卫康 隐形眼镜':{'url':'http://m.111.com.cn/list/960464-924059-0-0-0-0-0-1.html'},
+			'海昌':{'url':'http://m.111.com.cn/list/960464-924058-0-0-0-0-0-1.html'},
+			'海昌 隐形眼镜':{'url':'http://m.111.com.cn/list/960464-924058-0-0-0-0-0-1.html'},
+			'视康':{'url':'http://m.111.com.cn/list/960464-924057-0-0-0-0-0-1.html'},
+			'视康隐形眼镜':{'url':'http://m.111.com.cn/list/960464-924057-0-0-0-0-0-1.html'},
+			'爱尔康':{'url':'http://m.111.com.cn/list/960464-924056-0-0-0-0-0-1.html'},
+			'博士伦':{'url':'http://m.111.com.cn/list/960464-900313-0-0-0-0-0-1.html'},
+			'博士伦 隐形眼镜':{'url':'http://m.111.com.cn/list/960464-900313-0-0-0-0-0-1.html'},
+			'博士伦隐形眼镜':{'url':'http://m.111.com.cn/list/960464-900313-0-0-0-0-0-1.html'},
+			'隐形眼镜 博士伦':{'url':'http://m.111.com.cn/list/960464-900313-0-0-0-0-0-1.html'},
+			'博士伦隐形':{'url':'http://m.111.com.cn/list/960464-900313-0-0-0-0-0-1.html'},
+			'进口博士伦':{'url':'http://m.111.com.cn/list/960464-900313-0-0-0-0-0-1.html'},
+			'强生':{'url':'http://m.111.com.cn/list/960464-68-0-0-0-0-0-1.html'},
+			'强生隐形眼镜':{'url':'http://m.111.com.cn/list/960464-68-0-0-0-0-0-1.html'},
+			'强生 隐形眼镜':{'url':'http://m.111.com.cn/list/960464-68-0-0-0-0-0-1.html'},
+			'隐形眼镜 强生':{'url':'http://m.111.com.cn/list/960464-68-0-0-0-0-0-1.html'},
+			'强生 隐形':{'url':'http://m.111.com.cn/list/960464-68-0-0-0-0-0-1.html'},
+			'眼镜':{'url':'http://m.111.com.cn/list/960464-0-0-0-0-0-0-1.html'},
+			'隐形眼镜':{'url':'http://m.111.com.cn/list/960464-0-0-0-0-0-0-1.html'},
+			'抑郁症':{'url':'http://m.111.com.cn/list/965188-0-0-0-0-0-0-1.html'}	
+		};
+	var obj=specialUrls[keyword];
+	if(obj!=undefined){
+		var lc=obj.url;
+		if(lc!=''){
+			return lc;
+		}
+	}else{
+		return "";
+	}
+};
+function search(){
+	var keyword=$("#keyword").val();
+	if(keyword!=null && keyword!=""){
+		saveSearchHistory(keyword);
+		var specialUrl = businessLocation(keyword);
+		if(isEmpty(specialUrl)){
+			$("#wapSearchForm").attr("action","http://m.111.com.cn/search/search.action?keyWord="+encodeURI(encodeURI(keyword)));		
+		}else{
+			$("#wapSearchForm").attr("action",specialUrl);		
+		}
+	}else{
+		return false;
+	}
+}
+function oldSearch(){
+	var keyword=$("#keyword").val();
+	if(keyword!=null && keyword!=""){
+		saveSearchHistory(keyword);
+		var specialUrl = businessLocation(keyword);
+		if(isEmpty(specialUrl)){
+			window.location.href="http://m.111.com.cn/wap/search/search.action?keyWord="+encodeURI(encodeURI(keyword));	
+		}else{
+			window.location.href = specialUrl;
+		}
+	}
+}
+function mainSearch(a) {
+	var keyword = $(a).find("input").val();
+	if (keyword != null && keyword != "") {
+		saveSearchHistory(keyword);
+		var specialUrl = businessLocation(keyword);
+		if(isEmpty(specialUrl)){
+			$(a).attr( "action", "http://m.111.com.cn/search/search.action?keyWord=" + encodeURI(encodeURI(keyword)));
+		}else{
+			$(a).attr( "action",specialUrl);		
+		}
+	} else {
+		return false;
+	}
+}
+function saveSearchHistory(keyword){
+	keyword = keyword.trim();
+	var result = "";
+	var history = $.cookie("keyWordsHistory");
+	if(history && history !=""){
+		if(history !=keyword && !history.startWith(keyword + "|") && history.indexOf("|"+keyword+"|")==-1 && !history.endWith("|"+keyword)){
+			result = keyword + "|" + history;
+		}else{
+			result = history;
+		}
+		if(result.split("|").length >= 10){
+			result = result.substring(0,result.lastIndexOf("|"));
+		}
+	}else{
+		result = keyword;
+	}
+	$.cookie("keyWordsHistory", result, {expires: 30, path: "/", domain: ".111.com.cn"});
+}
+/*
+//多客宝
+$('.talk_link').click(function() {
+	$(this).toggleClass('btn_link_dis');
+	$('.talk_ul').toggleClass('open');
+	$('.talk_bg').toggle();
+});
+$('.talk_bg').click(function() {
+	$('.btn_talk').toggleClass('btn_link_dis');
+	$('.talk_ul').toggleClass('open');
+	$('.talk_bg').toggle();
+});
+*/
+/**
+ * 搜索框显示活动文描
+ * type:0表示页面初始化时调用  有关键字  placeholder置为关键字(数量)；
+ * 							没关键字  活动时间内val和placeholder置为活动文描
+ * 									 活动时间外placeholder置为输入商品名
+ * type:1表示搜索框键入时调用  活动时间内   placeholder置为活动文描
+ * 							 活动时间外  placeholder置为输入商品名
+ * 
+ */
+function isDoubleTwelve(type,keyword,count){
+	if(type=='0'){
+		if(keyword!=null && keyword!=""){
+			$("input[id='keyword']").attr("placeholder",keyword+"("+count+")");
+			$("input[id='comkeyword']").attr("placeholder",keyword+"("+count+")");
+		}else{
+			jQuery.ajax({
+    		  type:"post",						
+    		  url: '/promotion/checkPromotionTime.action',						
+    		  dataType:'text',
+    		  success: function(data){
+    			  if(data=='true'){
+					  $("input[id='keyword']").attr("placeholder","搜索111查看所有活动商品");
+					  $("input[id='comkeyword']").attr("placeholder","搜索111查看所有活动商品"); 
+    			  }else{
+					  $("input[id='keyword']").attr("placeholder","输入商品名称");
+					  $("input[id='comkeyword']").attr("placeholder","输入商品名称");
+    			  }
+    		  }
+    		});
+		}
+	}else{
+		jQuery.ajax({
+    		  type:"post",						
+    		  url: '/promotion/checkPromotionTime.action',						
+    		  dataType:'text',
+    		  success: function(data){
+    			  if(data=='true'){
+					  $("input[id='keyword']").attr("placeholder","搜索111查看所有活动商品");
+					  $("input[id='comkeyword']").attr("placeholder","搜索111查看所有活动商品"); 
+    			  }else{
+					  $("input[id='keyword']").attr("placeholder","输入商品名称");
+					  $("input[id='comkeyword']").attr("placeholder","输入商品名称");
+    			  }
+    		  }
+    	});
+	}
+}
+$(function(){
+	$(".h_search").click(function(){
+		var $obj = $(this);
+		initSearch($obj);
+	});
+	$("#keyword").focus(function(){
+		var $obj = $(this);
+		initSearch($obj);
+	});
+});
+function initSearch(obj){
+	obj.parents("article").hide();
+	$("#search_div").show();
+	$("#comkeyword").focus();
+	initKeyHistory();
+	bindSearchInputChange();
+	$("#search_box01 li a").click(function(){
+		var val = $(this).text();
+		if(val.indexOf("...")>-1){
+			val = val.substring(0,val.lastIndexOf("..."));
+		}
+		$("#comkeyword").val(val);
+		$("#comSearchForm").submit();
+	});
+	$("#searchBack").click(function(){
+		$(this).parents("article").hide();
+		$("#container").show();
+	});
+	$("#comSearchForm .search_close").click(function(){
+		$("#comkeyword").val("");
+		$("#search_div #suggestSearch").hide();
+		$("#search_div #mainSearch").show();
+		$("#comSearchForm .search_close").hide();
+	});
+	$("#search_box01 .clear_txt a").click(function(){
+		$.cookie("keyWordsHistory",null, {path: "/", domain: ".111.com.cn"});
+		$("#search_box01 ul").html("");
+		$(".clear_txt").hide();
+	});
+	$("[navtype]").click(function(){
+		if($(this).hasClass("active")){
+			return false;
+		}
+		$(this).closest("li").siblings().find("a").removeClass("active");
+		$(this).addClass("active");
+		if($(this).attr("navtype") == 0){
+			$("#search_box01").removeClass("hide");
+			$("#search_box02").addClass("hide");
+		}else{
+			$("#search_box02").removeClass("hide");
+			$("#search_box01").addClass("hide");
+		}
+	});
+	$("#gHeader .btn_search").click(function(){
+		$("#comSearchForm").submit();
+	});
+	initHotKeys();
+}
+function bindSearchInputChange(){
+	var bind_name="input";
+    if(navigator.userAgent.indexOf("MSIE")!=-1) bind_name="propertychange";//判断是否为IE内核 IE内核的事件名称要改为propertychange
+    $("input").bind(bind_name,function(){
+        if(this.value!=null&&this.value!=""){
+        	$("#comSearchForm .search_close").show();
+        	jQuery.ajax({
+	      		  type:"post",
+	      		  url: '/suggest/suggest.action',
+	      		  data: 'keyWord='+this.value,
+	      		  success: function(data){
+	      			  if(data && data!=""){
+	      				  $("#search_div #suggestSearch").html(data);
+	      				  $("#search_div #suggestSearch").show();
+		      			  $(".com_close a").click(function(){
+		      				  $("#search_div #suggestSearch").hide();
+		      				  $("#search_div #mainSearch").show();
+			      		  });
+		      			  $("#suggestSearch li").click(function(){
+			      				$("#comkeyword").val($(this).find("a").text());
+		      					$("#comSearchForm").submit();
+		      			  });
+	      			  }
+	      			  $(document.documentElement).animate({
+	      			    scrollTop: 0
+	      		    	},100);
+	      			  $("#mainSearch").hide();
+	      		  }
+	      	});
+        }else{
+        	$("#comSearchForm .search_close").hide();
+        	$("#search_div #suggestSearch").hide();
+        	$("#search_div #mainSearch").show();
+        }
+    });
+}
+function initHotKeys(){
+	$.ajax({
+        type: "GET",
+        url: "/mblock/18/b_wap_search_suggest.html",
+        dataType: "text",
+        async:true,
+        success: function(data){
+        	if(data && data!=""){
+        		$("#search_box02").html(data);
+        		$("#search_box02 li a").click(function(){
+        			$("#comkeyword").val($(this).text());
+        			if($(this).attr("href").indexOf("javascript:void(0)") !=-1){
+        				$("#comSearchForm").submit();
+        			}
+        		});
+        	}
+        }
+    });
+}
+function initKeyHistory(){
+	var keyHistory = jQuery.cookie("keyWordsHistory");
+	if(isEmpty(keyHistory)){
+		return;
+	}
+	var words = keyHistory.split('|');
+	$("#search_box01").html("");
+	var html = "";
+	$(words).each(function(i,val){
+		if(val == ""){
+			return true;
+		}
+		if(val.length>=10){
+			val = val.substring(0,9)+"...";
+		}
+		if(i%3 == 0){
+			html+="<ul class=\"search_list clearfix\">";
+		}
+		html+="<li><a href=\"javascript:void(0);\">"+val+"</a></li>";
+		if(i%3 == 2 || i==words.length-1){
+			html+="</ul>";
+		}
+	});
+	html += "<p class=\"clear_txt\"><a href=\"javascript:void(0)\">清空历史记录</a></p>";
+	$("#search_box01").append(html);
+	
+}
+function commonSearch(){
+	var keyword=$("#comkeyword").val();
+	if(keyword!=null && keyword!=""){
+		saveSearchHistory(keyword);
+		var specialUrl = businessLocation(keyword);
+		if(isEmpty(specialUrl)){
+			$("#comSearchForm").attr("action","http://m.111.com.cn/search/search.action?keyWord="+encodeURI(encodeURI(keyword)));		
+		}else{
+			$("#comSearchForm").attr("action",specialUrl);		
+		}
+	}else{
+		return false;
+	}
+}/*
+ * Swipe 2.0
+ *
+ * Brad Birdsall
+ * Copyright 2013, MIT License
+ *
+*/
+
+function Swipe(container, options) {
+
+  "use strict";
+
+  // utilities
+  var noop = function() {}; // simple no operation function
+  var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
+  
+  // check browser capabilities
+  var browser = {
+    addEventListener: !!window.addEventListener,
+    touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+    transitions: (function(temp) {
+      var props = ['transformProperty', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'];
+      for ( var i in props ) if (temp.style[ props[i] ] !== undefined) return true;
+      return false;
+    })(document.createElement('swipe'))
+  };
+
+  // quit if no root element
+  if (!container) return;
+  var element = container.children[0];
+  var slides, slidePos, width;
+  options = options || {};
+  var index = parseInt(options.startSlide, 10) || 0;
+  var speed = options.speed || 300;
+  options.continuous = options.continuous ? options.continuous : true;
+
+  function setup() {
+
+    // cache slides
+    slides = element.children;
+
+    // create an array to store current positions of each slide
+    slidePos = new Array(slides.length);
+
+    // determine width of each slide
+    width = container.getBoundingClientRect().width || container.offsetWidth;
+
+    element.style.width = (slides.length * width) + 'px';
+
+    // stack elements
+    var pos = slides.length;
+    while(pos--) {
+
+      var slide = slides[pos];
+
+      slide.style.width = width + 'px';
+      slide.setAttribute('data-index', pos);
+
+      if (browser.transitions) {
+        slide.style.left = (pos * -width) + 'px';
+        move(pos, index > pos ? -width : (index < pos ? width : 0), 0);
+      }
+
+    }
+
+    if (!browser.transitions) element.style.left = (index * -width) + 'px';
+
+    container.style.visibility = 'visible';
+
+  }
+
+  function prev() {
+
+    if (index) slide(index-1);
+    else if (options.continuous) slide(slides.length-1);
+
+  }
+
+  function next() {
+
+    if (index < slides.length - 1) slide(index+1);
+    else if (options.continuous) slide(0);
+
+  }
+
+  function slide(to, slideSpeed) {
+
+    // do nothing if already on requested slide
+    if (index == to) return;
+    
+    if (browser.transitions) {
+
+      var diff = Math.abs(index-to) - 1;
+      var direction = Math.abs(index-to) / (index-to); // 1:right -1:left
+
+      while (diff--) move((to > index ? to : index) - diff - 1, width * direction, 0);
+
+      move(index, width * direction, slideSpeed || speed);
+      move(to, 0, slideSpeed || speed);
+
+    } else {
+
+      animate(index * -width, to * -width, slideSpeed || speed);
+
+    }
+
+    index = to;
+
+    offloadFn(options.callback && options.callback(index, slides[index]));
+
+  }
+
+  function move(index, dist, speed) {
+
+    translate(index, dist, speed);
+    slidePos[index] = dist;
+
+  }
+
+  function translate(index, dist, speed) {
+
+    var slide = slides[index];
+    var style = slide && slide.style;
+
+    if (!style) return;
+
+    style.webkitTransitionDuration = 
+    style.MozTransitionDuration = 
+    style.msTransitionDuration = 
+    style.OTransitionDuration = 
+    style.transitionDuration = speed + 'ms';
+
+    style.webkitTransform = 'translate(' + dist + 'px,0)' + 'translateZ(0)';
+    style.msTransform = 
+    style.MozTransform = 
+    style.OTransform = 'translateX(' + dist + 'px)';
+
+  }
+
+  function animate(from, to, speed) {
+
+    // if not an animation, just reposition
+    if (!speed) {
+      
+      element.style.left = to + 'px';
+      return;
+
+    }
+    
+    var start = +new Date;
+    
+    var timer = setInterval(function() {
+
+      var timeElap = +new Date - start;
+      
+      if (timeElap > speed) {
+
+        element.style.left = to + 'px';
+
+        if (delay) begin();
+
+        options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
+
+        clearInterval(timer);
+        return;
+
+      }
+
+      element.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px';
+
+    }, 4);
+
+  }
+
+  // setup auto slideshow
+  var delay = options.auto || 0;
+  var interval;
+
+  function begin() {
+
+    interval = setTimeout(next, delay);
+
+  }
+
+  function stop() {
+
+    delay = 0;
+    clearTimeout(interval);
+
+  }
+
+
+  // setup initial vars
+  var start = {};
+  var delta = {};
+  var isScrolling;      
+
+  // setup event capturing
+  var events = {
+
+    handleEvent: function(event) {
+
+      switch (event.type) {
+        case 'touchstart': this.start(event); break;
+        case 'touchmove': this.move(event); break;
+        case 'touchend': offloadFn(this.end(event)); break;
+        case 'webkitTransitionEnd':
+        case 'msTransitionEnd':
+        case 'oTransitionEnd':
+        case 'otransitionend':
+        case 'transitionend': offloadFn(this.transitionEnd(event)); break;
+        case 'resize': offloadFn(setup.call()); break;
+      }
+
+      if (options.stopPropagation) event.stopPropagation();
+
+    },
+    start: function(event) {
+
+      var touches = event.touches[0];
+
+      // measure start values
+      start = {
+
+        // get initial touch coords
+        x: touches.pageX,
+        y: touches.pageY,
+
+        // store time to determine touch duration
+        time: +new Date
+
+      };
+      
+      // used for testing first move event
+      isScrolling = undefined;
+
+      // reset delta and end measurements
+      delta = {};
+
+      // attach touchmove and touchend listeners
+      element.addEventListener('touchmove', this, false);
+      element.addEventListener('touchend', this, false);
+
+    },
+    move: function(event) {
+
+      // ensure swiping with one touch and not pinching
+      if ( event.touches.length > 1 || event.scale && event.scale !== 1) return
+
+      if (options.disableScroll) event.preventDefault();
+
+      var touches = event.touches[0];
+
+      // measure change in x and y
+      delta = {
+        x: touches.pageX - start.x,
+        y: touches.pageY - start.y
+      }
+
+      // determine if scrolling test has run - one time test
+      if ( typeof isScrolling == 'undefined') {
+        isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
+      }
+
+      // if user is not trying to scroll vertically
+      if (!isScrolling) {
+
+        // prevent native scrolling 
+        event.preventDefault();
+
+        // stop slideshow
+        stop();
+
+        // increase resistance if first or last slide
+        delta.x = 
+          delta.x / 
+            ( (!index && delta.x > 0               // if first slide and sliding left
+              || index == slides.length - 1        // or if last slide and sliding right
+              && delta.x < 0                       // and if sliding at all
+            ) ?                      
+            ( Math.abs(delta.x) / width + 1 )      // determine resistance level
+            : 1 );                                 // no resistance if false
+        
+        // translate 1:1
+        translate(index-1, delta.x + slidePos[index-1], 0);
+        translate(index, delta.x + slidePos[index], 0);
+        translate(index+1, delta.x + slidePos[index+1], 0);
+
+      }
+
+    },
+    end: function(event) {
+
+      // measure duration
+      var duration = +new Date - start.time;
+
+      // determine if slide attempt triggers next/prev slide
+      var isValidSlide = 
+            Number(duration) < 250               // if slide duration is less than 250ms
+            && Math.abs(delta.x) > 20            // and if slide amt is greater than 20px
+            || Math.abs(delta.x) > width/2;      // or if slide amt is greater than half the width
+
+      // determine if slide attempt is past start and end
+      var isPastBounds = 
+            !index && delta.x > 0                            // if first slide and slide amt is greater than 0
+            || index == slides.length - 1 && delta.x < 0;    // or if last slide and slide amt is less than 0
+      
+      // determine direction of swipe (true:right, false:left)
+      var direction = delta.x < 0;
+
+      // if not scrolling vertically
+      if (!isScrolling) {
+
+        if (isValidSlide && !isPastBounds) {
+
+          if (direction) {
+
+            move(index-1, -width, 0);
+            move(index, slidePos[index]-width, speed);
+            move(index+1, slidePos[index+1]-width, speed);
+            index += 1;
+
+          } else {
+
+            move(index+1, width, 0);
+            move(index, slidePos[index]+width, speed);
+            move(index-1, slidePos[index-1]+width, speed);
+            index += -1;
+
+          }
+
+          options.callback && options.callback(index, slides[index]);
+
+        } else {
+
+          move(index-1, -width, speed);
+          move(index, 0, speed);
+          move(index+1, width, speed);
+
+        }
+
+      }
+
+      // kill touchmove and touchend event listeners until touchstart called again
+      element.removeEventListener('touchmove', events, false)
+      element.removeEventListener('touchend', events, false)
+
+    },
+    transitionEnd: function(event) {
+
+      if (parseInt(event.target.getAttribute('data-index'), 10) == index) {
+        
+        if (delay) begin();
+
+        options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
+
+      }
+
+    }
+
+  }
+
+  // trigger setup
+  setup();
+
+  // start auto slideshow if applicable
+  if (delay) begin();
+
+
+  // add event listeners
+  if (browser.addEventListener) {
+    
+    // set touchstart event on element    
+    if (browser.touch) element.addEventListener('touchstart', events, false);
+
+    if (browser.transitions) {
+      element.addEventListener('webkitTransitionEnd', events, false);
+      element.addEventListener('msTransitionEnd', events, false);
+      element.addEventListener('oTransitionEnd', events, false);
+      element.addEventListener('otransitionend', events, false);
+      element.addEventListener('transitionend', events, false);
+    }
+
+    // set resize event on window
+    window.addEventListener('resize', events, false);
+
+  } else {
+
+    window.onresize = function () { setup() }; // to play nice with old IE
+
+  }
+
+  // expose the Swipe API
+  return {
+    setup: function() {
+
+      setup();
+
+    },
+    slide: function(to, speed) {
+
+      slide(to, speed);
+
+    },
+    prev: function() {
+
+      // cancel slideshow
+      stop();
+
+      prev();
+
+    },
+    next: function() {
+
+      stop();
+
+      next();
+
+    },
+    getPos: function() {
+
+      // return current index position
+      return index;
+
+    },
+    kill: function() {
+
+      // cancel slideshow
+      stop();
+
+      // reset element
+      element.style.width = 'auto';
+      element.style.left = 0;
+
+      // reset slides
+      var pos = slides.length;
+      while(pos--) {
+
+        var slide = slides[pos];
+        slide.style.width = '100%';
+        slide.style.left = 0;
+
+        if (browser.transitions) translate(pos, 0, 0);
+
+      }
+
+      // removed event listeners
+      if (browser.addEventListener) {
+
+        // remove current event listeners
+        element.removeEventListener('touchstart', events, false);
+        element.removeEventListener('webkitTransitionEnd', events, false);
+        element.removeEventListener('msTransitionEnd', events, false);
+        element.removeEventListener('oTransitionEnd', events, false);
+        element.removeEventListener('otransitionend', events, false);
+        element.removeEventListener('transitionend', events, false);
+        window.removeEventListener('resize', events, false);
+
+      }
+      else {
+
+        window.onresize = null;
+
+      }
+
+    }
+  }
+
+}
+
+
+if ( window.jQuery || window.Zepto ) {
+  (function($) {
+    $.fn.Swipe = function(params) {
+      return this.each(function() {
+        $(this).data('Swipe', new Swipe($(this)[0], params));
+      });
+    }
+  })( window.jQuery || window.Zepto )
+}

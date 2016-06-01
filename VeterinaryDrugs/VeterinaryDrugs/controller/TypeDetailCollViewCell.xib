@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TypeDetailCollViewCellID" id="gTV-IL-0wX" customClass="TypeDetailCollViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="119" height="119"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="119" height="119"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="兽药" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mY-HV-UXc">
+                        <rect key="frame" x="0.0" y="102" width="119" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NfN-Wu-vti">
+                        <rect key="frame" x="0.0" y="0.0" width="119" height="98"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="98" id="CX4-hj-ib1"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="NfN-Wu-vti" firstAttribute="width" secondItem="gTV-IL-0wX" secondAttribute="width" id="7Ky-Kp-7Ac"/>
+                <constraint firstItem="NfN-Wu-vti" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="EyA-UZ-8de"/>
+                <constraint firstItem="1mY-HV-UXc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="fog-wn-NCb"/>
+                <constraint firstAttribute="bottom" secondItem="1mY-HV-UXc" secondAttribute="bottom" id="iqn-4g-Ggi"/>
+                <constraint firstAttribute="trailing" secondItem="1mY-HV-UXc" secondAttribute="trailing" id="l9m-HR-u6V"/>
+                <constraint firstAttribute="trailing" secondItem="NfN-Wu-vti" secondAttribute="trailing" id="n5g-ne-AIS"/>
+                <constraint firstItem="NfN-Wu-vti" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ngE-ec-Gop"/>
+            </constraints>
+            <size key="customSize" width="119" height="119"/>
+            <connections>
+                <outlet property="imgView" destination="NfN-Wu-vti" id="Bdr-rF-s7X"/>
+                <outlet property="titleLabel" destination="1mY-HV-UXc" id="c98-iH-ad1"/>
+            </connections>
+            <point key="canvasLocation" x="287.5" y="201.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

@@ -11,5 +11,6 @@
 @interface HomeSelarCell : UICollectionViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet UILabel *textLabel;
+@property (strong, nonatomic) IBOutlet UILabel *priceLabel;
 
 @end

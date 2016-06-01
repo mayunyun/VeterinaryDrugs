@@ -40,7 +40,7 @@
  */
 +(NSString *)intactUrlWithUrl:(NSString *)url
 {
-    return [NSString stringWithFormat:@"%@/%@",ZhiXuanLCHttpServer,url];
+    return [NSString stringWithFormat:@"%@/%@",ShouYaoHttpServer,url];
 }
 
 /**

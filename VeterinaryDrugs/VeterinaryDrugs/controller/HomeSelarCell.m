@@ -13,6 +13,17 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    
+    
 }
+
+- (void)layoutSubviews
+{
+    _textLabel.numberOfLines = 0;
+    
+}
+
+
+
 
 @end

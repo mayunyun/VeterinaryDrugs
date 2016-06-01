@@ -45,6 +45,7 @@
         
         _scrollView = [[UIScrollView alloc]initWithFrame:self.bounds];
         _scrollView.delegate = self;
+        _scrollView.scrollsToTop = NO;
         _scrollView.contentSize = CGSizeMake(width *_imageArray.count, height);
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = YES;
@@ -64,7 +65,8 @@
         }
         _scrollView.contentOffset = CGPointMake(width, 0);
         _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, height - 30, width, 30)];
-        _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:240 green:60 blue:70 alpha:1];//RGB(240, 60, 70);
+        _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:240/255.0 green:53/255.0 blue:53/255.0 alpha:1];//RGB(240, 60, 70);
+        
         _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
         _pageControl.numberOfPages = imgArr.count;
         _pageControl.currentPage = 0;
