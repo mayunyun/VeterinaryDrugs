@@ -50,27 +50,27 @@
 //    [_dataArray addObject:model];
 //    [_dataArray addObject:model1];
     
-//    [self creatUI];
+    [self creatUI];
     
     
 }
 
-//- (void)viewWillAppear:(BOOL)animated{
-//    [super viewWillAppear:animated];
-//    if ([[[NSUserDefaults standardUserDefaults]objectForKey:IsLogin] isEqualToString:@"1"]) {
-//        //登录
-//        [self dataRequest];
-//    }else{
-//    LoginViewController* loginVC = [[LoginViewController alloc]init];
-//    loginVC.typeLoginSource = typeTabBarShopToLogin;
-//    [self.navigationController pushViewController:loginVC animated:YES];
-//    }
-//    
-//}
-//
-//- (void)viewWillDisappear:(BOOL)animated{
-//    [super viewWillDisappear:animated];
-//}
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if ([[[NSUserDefaults standardUserDefaults]objectForKey:IsLogin] isEqualToString:@"1"]) {
+        //登录
+        [self dataRequest];
+    }else{
+    LoginViewController* loginVC = [[LoginViewController alloc]init];
+    loginVC.typeLoginSource = typeTabBarShopToLogin;
+    [self.navigationController pushViewController:loginVC animated:YES];
+    }
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+}
 
 -(void)creatUI{
 
@@ -286,22 +286,22 @@
 
 }
 
-#pragma mark webView
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
-    self.tabBarController.tabBar.hidden = YES;
-    WebViewController* webViewVC = [[WebViewController alloc]init];
-    webViewVC.weburl = [NSString stringWithFormat:@"%@/tmpl/cart_list.html",ShouYaoWapServer];
-    [self.navigationController pushViewController:webViewVC animated:YES];
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBar.hidden = NO;
-    self.tabBarController.tabBar.hidden = YES;
-}
+//#pragma mark webView
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    self.navigationController.navigationBar.hidden = YES;
+//    self.tabBarController.tabBar.hidden = YES;
+//    WebViewController* webViewVC = [[WebViewController alloc]init];
+//    webViewVC.weburl = [NSString stringWithFormat:@"%@/tmpl/cart_list.html",ShouYaoWapServer];
+//    [self.navigationController pushViewController:webViewVC animated:YES];
+//}
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    self.navigationController.navigationBar.hidden = NO;
+//    self.tabBarController.tabBar.hidden = YES;
+//}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
