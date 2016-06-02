@@ -167,7 +167,7 @@
     adbgView.backgroundColor = [UIColor clearColor];
     [_bgScrollView addSubview:adbgView];
     
-    NSArray* btn1Arr = @[@"img_navi01",@"img_navi02",@"img_navi04",@"img_navi05",@"img_navi06",@"img_navi07",@"img_navi08",@"img_navi09"];
+    NSArray* btn1Arr = @[@"img_navi01",@"img_navi04",@"img_navi06",@"img_navi07",@"img_navi08",@"img_navi02",@"img_navi05",@"img_navi09"];
     NSArray* btn1LabelArr = @[@"精品推荐",@"畜类用品",@"禽类用品",@"水产用药",@"宠物用药",@"药品包装",@"化学药剂",@"设备仪器"];
     for (int i = 0; i < 2; i ++) {
         for (int  j =0; j < 4; j++) {

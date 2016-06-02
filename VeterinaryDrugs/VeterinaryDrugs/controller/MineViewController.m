@@ -27,33 +27,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self creatUI];
+//    [self creatUI];
     
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear: animated];
-    self.navigationController.navigationBar.hidden = YES;
-    self.tabBarController.tabBar.hidden = NO;
-    if ([[[NSUserDefaults standardUserDefaults]objectForKey:IsLogin] isEqualToString:@"1"]) {
-        //登录
-        [self headerDataRequest];
-    }else{
-        LoginViewController* loginVC = [[LoginViewController alloc]init];
-        loginVC.typeLoginSource = typeTabBarShopToLogin;
-        [self.navigationController pushViewController:loginVC animated:YES];
-    }
-    
-
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear: animated];
-    self.navigationController.navigationBar.hidden = NO;
-    self.tabBarController.tabBar.hidden = NO;
-    
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear: animated];
+//    self.navigationController.navigationBar.hidden = YES;
+//    self.tabBarController.tabBar.hidden = NO;
+//    if ([[[NSUserDefaults standardUserDefaults]objectForKey:IsLogin] isEqualToString:@"1"]) {
+//        //登录
+//        [self headerDataRequest];
+//    }else{
+//        LoginViewController* loginVC = [[LoginViewController alloc]init];
+//        loginVC.typeLoginSource = typeTabBarShopToLogin;
+//        [self.navigationController pushViewController:loginVC animated:YES];
+//    }
+//    
+//
+//}
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear: animated];
+//    self.navigationController.navigationBar.hidden = NO;
+//    self.tabBarController.tabBar.hidden = NO;
+//    
+//}
 
 //创建视图
 - (void)creatUI
@@ -455,22 +455,22 @@
 
 
 
-//#pragma mark webView
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    self.navigationController.navigationBar.hidden = YES;
-//    self.tabBarController.tabBar.hidden = YES;
-//    WebViewController* webViewVC = [[WebViewController alloc]init];
-//    webViewVC.weburl = [NSString stringWithFormat:@"%@/user.html",ShouYaoWapServer];
-//    [self.navigationController pushViewController:webViewVC animated:YES];
-//}
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    self.navigationController.navigationBar.hidden = NO;
-//    self.tabBarController.tabBar.hidden = YES;
-//}
+#pragma mark webView
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.hidden = YES;
+    self.tabBarController.tabBar.hidden = YES;
+    WebViewController* webViewVC = [[WebViewController alloc]init];
+    webViewVC.weburl = [NSString stringWithFormat:@"%@/user.html",ShouYaoWapServer];
+    [self.navigationController pushViewController:webViewVC animated:YES];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.hidden = NO;
+    self.tabBarController.tabBar.hidden = YES;
+}
 
 
 @end

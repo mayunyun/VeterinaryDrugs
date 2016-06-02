@@ -30,37 +30,37 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"分类";
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.title = @"商品分类";
-    UIBarButtonItem* backBar = [MyNavViewController backBarButtonItemTarget:self action:@selector(btnBackClick:)];
-    self.navigationItem.leftBarButtonItem = backBar;
-    self.navigationController.navigationBar.backgroundColor = TabLableTextColor;
-    _listArray = [[NSMutableArray alloc]init];
-    _detailArray = [[NSMutableArray alloc]init];
-    [self creatUI];
-    
-    _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    //设置模式
-    _hud.mode = MBProgressHUDModeIndeterminate;
-    [_hud show:YES];
-    [self listdataRequest];
-    [self requestDetailData];
+//    self.navigationItem.leftBarButtonItem = nil;
+//    self.navigationItem.rightBarButtonItem = nil;
+//    self.navigationItem.title = @"商品分类";
+//    UIBarButtonItem* backBar = [MyNavViewController backBarButtonItemTarget:self action:@selector(btnBackClick:)];
+//    self.navigationItem.leftBarButtonItem = backBar;
+//    self.navigationController.navigationBar.backgroundColor = TabLableTextColor;
+//    _listArray = [[NSMutableArray alloc]init];
+//    _detailArray = [[NSMutableArray alloc]init];
+//    [self creatUI];
+//    
+//    _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    //设置模式
+//    _hud.mode = MBProgressHUDModeIndeterminate;
+//    [_hud show:YES];
+//    [self listdataRequest];
+//    [self requestDetailData];
     
     
 }
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.hidden = NO;
-    self.tabBarController.tabBar.hidden = YES;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    
-    self.navigationController.navigationBar.hidden = NO;
-    self.tabBarController.tabBar.hidden = NO;
-}
+//- (void)viewWillAppear:(BOOL)animated{
+//    [super viewWillAppear:animated];
+//    self.navigationController.navigationBar.hidden = NO;
+//    self.tabBarController.tabBar.hidden = YES;
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    
+//    self.navigationController.navigationBar.hidden = NO;
+//    self.tabBarController.tabBar.hidden = NO;
+//}
 
 - (void)creatUI
 {
@@ -271,22 +271,22 @@
 }
 
 
-//#pragma mark 分类
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    self.navigationController.navigationBar.hidden = YES;
-//    self.tabBarController.tabBar.hidden = YES;
-//    WebViewController* webViewVC = [[WebViewController alloc]init];
-//    webViewVC.weburl = [NSString stringWithFormat:@"%@/tmpl/product_first_categroy.html",ShouYaoWapServer];
-//    [self.navigationController pushViewController:webViewVC animated:YES];
-//}
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    self.navigationController.navigationBar.hidden = NO;
-//    self.tabBarController.tabBar.hidden = YES;
-//}
+#pragma mark 分类
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.hidden = YES;
+    self.tabBarController.tabBar.hidden = YES;
+    WebViewController* webViewVC = [[WebViewController alloc]init];
+    webViewVC.weburl = [NSString stringWithFormat:@"%@/tmpl/product_first_categroy.html",ShouYaoWapServer];
+    [self.navigationController pushViewController:webViewVC animated:YES];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.hidden = NO;
+    self.tabBarController.tabBar.hidden = YES;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
