@@ -55,24 +55,6 @@
     
 }
 
-//#pragma mark webView
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    self.navigationController.navigationBar.hidden = YES;
-//    self.tabBarController.tabBar.hidden = YES;
-//    WebViewController* webViewVC = [[WebViewController alloc]init];
-//    webViewVC.weburl = [NSString stringWithFormat:@"%@/user.html",ShouYaoWapServer];
-//    [self.navigationController pushViewController:webViewVC animated:YES];
-//}
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    self.navigationController.navigationBar.hidden = NO;
-//    self.tabBarController.tabBar.hidden = YES;
-//}
-
-
 //创建视图
 - (void)creatUI
 {
@@ -470,6 +452,25 @@
     button.contentHorizontalAlignment = contentHorizontalAlignment;
     return button;
 }
+
+
+
+//#pragma mark webView
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    self.navigationController.navigationBar.hidden = YES;
+//    self.tabBarController.tabBar.hidden = YES;
+//    WebViewController* webViewVC = [[WebViewController alloc]init];
+//    webViewVC.weburl = [NSString stringWithFormat:@"%@/user.html",ShouYaoWapServer];
+//    [self.navigationController pushViewController:webViewVC animated:YES];
+//}
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    self.navigationController.navigationBar.hidden = NO;
+//    self.tabBarController.tabBar.hidden = YES;
+//}
 
 
 @end

@@ -146,15 +146,24 @@
             [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:IsLogin];
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"datas"][@"username"] forKey:kLoginUserName];
             [[NSUserDefaults standardUserDefaults] setObject:dic[@"datas"][@"key"] forKey:kLoginUserKey];
-            
-            if (_typeLoginSource == typeHomeViewShopToLogin) {
-                [self.navigationController popViewControllerAnimated:YES];
-            }if (_typeLoginSource == typeTabBarShopToLogin) {
-                [self.tabBarController setSelectedIndex:2];
-                [self.navigationController popViewControllerAnimated:YES];
-            }if (_typeLoginSource == typeTabBarMineToLogin) {
-                [self.tabBarController setSelectedIndex:3];
-                [self.navigationController popViewControllerAnimated:YES];
+            switch (_typeLoginSource) {
+                case typeNomalToLogin:
+                    [self.tabBarController setSelectedIndex:1];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    break;
+                case typeHomeViewShopToLogin:
+                    [self.navigationController popViewControllerAnimated:YES];
+                    break;
+                case typeTabBarShopToLogin:
+                    [self.tabBarController setSelectedIndex:2];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    break;
+                case typeTabBarMineToLogin:
+                    [self.tabBarController setSelectedIndex:3];
+                    [self.navigationController popViewControllerAnimated:YES];
+                    break;
+                default:
+                    break;
             }
         }
         else

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7801FE741CFEB0E8001B7380 /* AddAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7801FE731CFEB0E8001B7380 /* AddAddressViewController.m */; };
+		7801FE771CFEB315001B7380 /* MineNavCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7801FE761CFEB315001B7380 /* MineNavCommonViewController.m */; };
+		7801FE7C1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7801FE7B1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m */; };
 		78367A071CF3E4CC008EBD60 /* ShouYaoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 78367A061CF3E4CC008EBD60 /* ShouYaoVC.m */; };
 		78367A0B1CF3F14A008EBD60 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = 78367A081CF3F14A008EBD60 /* index.css */; };
 		78367A0C1CF3F14A008EBD60 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 78367A091CF3F14A008EBD60 /* index.html */; };
@@ -189,6 +192,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7801FE721CFEB0E8001B7380 /* AddAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressViewController.h; sourceTree = "<group>"; };
+		7801FE731CFEB0E8001B7380 /* AddAddressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressViewController.m; sourceTree = "<group>"; };
+		7801FE751CFEB315001B7380 /* MineNavCommonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineNavCommonViewController.h; sourceTree = "<group>"; };
+		7801FE761CFEB315001B7380 /* MineNavCommonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineNavCommonViewController.m; sourceTree = "<group>"; };
+		7801FE7A1CFEDAF0001B7380 /* AddAddressProvCityTownModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressProvCityTownModel.h; sourceTree = "<group>"; };
+		7801FE7B1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressProvCityTownModel.m; sourceTree = "<group>"; };
 		78367A051CF3E4CC008EBD60 /* ShouYaoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShouYaoVC.h; sourceTree = "<group>"; };
 		78367A061CF3E4CC008EBD60 /* ShouYaoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShouYaoVC.m; sourceTree = "<group>"; };
 		78367A081CF3F14A008EBD60 /* index.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = index.css; sourceTree = "<group>"; };
@@ -466,6 +475,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7801FE781CFEB500001B7380 /* 账户管理 */ = {
+			isa = PBXGroup;
+			children = (
+				78EBFDEB1CFD312700D6A374 /* AccountViewController.h */,
+				78EBFDEC1CFD312700D6A374 /* AccountViewController.m */,
+			);
+			name = "账户管理";
+			sourceTree = "<group>";
+		};
+		7801FE791CFEB56E001B7380 /* 地址管理 */ = {
+			isa = PBXGroup;
+			children = (
+				78EBFDFA1CFDA94C00D6A374 /* AddressViewController.h */,
+				78EBFDFB1CFDA94C00D6A374 /* AddressViewController.m */,
+				7801FE721CFEB0E8001B7380 /* AddAddressViewController.h */,
+				7801FE731CFEB0E8001B7380 /* AddAddressViewController.m */,
+				7801FE7A1CFEDAF0001B7380 /* AddAddressProvCityTownModel.h */,
+				7801FE7B1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m */,
+			);
+			name = "地址管理";
+			sourceTree = "<group>";
+		};
 		788B338E1CED4D6200DB71B3 = {
 			isa = PBXGroup;
 			children = (
@@ -689,12 +720,12 @@
 			children = (
 				788B34D21CED62BF00DB71B3 /* MineViewController.h */,
 				788B34D31CED62BF00DB71B3 /* MineViewController.m */,
+				7801FE751CFEB315001B7380 /* MineNavCommonViewController.h */,
+				7801FE761CFEB315001B7380 /* MineNavCommonViewController.m */,
 				78EBFDEE1CFD341100D6A374 /* MineUserModel.h */,
 				78EBFDEF1CFD341100D6A374 /* MineUserModel.m */,
-				78EBFDEB1CFD312700D6A374 /* AccountViewController.h */,
-				78EBFDEC1CFD312700D6A374 /* AccountViewController.m */,
-				78EBFDFA1CFDA94C00D6A374 /* AddressViewController.h */,
-				78EBFDFB1CFDA94C00D6A374 /* AddressViewController.m */,
+				7801FE781CFEB500001B7380 /* 账户管理 */,
+				7801FE791CFEB56E001B7380 /* 地址管理 */,
 			);
 			name = "我";
 			sourceTree = "<group>";
@@ -1221,10 +1252,12 @@
 				78EBFDF61CFD87D700D6A374 /* SubmitOrderViewController.m in Sources */,
 				78D7BB7C1CF69214007CDA7E /* BaseModel.m in Sources */,
 				788B34CE1CED628E00DB71B3 /* HomeViewController.m in Sources */,
+				7801FE771CFEB315001B7380 /* MineNavCommonViewController.m in Sources */,
 				787C81581CEEB463004A695A /* HomeSelarModel.m in Sources */,
 				788B35051CED998F00DB71B3 /* EScrollerView.m in Sources */,
 				78D7BB701CF68354007CDA7E /* UIScrollView+MJRefresh.m in Sources */,
 				788B34F81CED717A00DB71B3 /* AFURLSessionManager.m in Sources */,
+				7801FE7C1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m in Sources */,
 				788B35A41CED9B6000DB71B3 /* SDWebImageDownloaderOperation.m in Sources */,
 				78D7BB771CF68354007CDA7E /* PullingRefreshScrollView.m in Sources */,
 				787C815B1CEEC15B004A695A /* FirstCollectionView.m in Sources */,
@@ -1239,6 +1272,7 @@
 				788B34D41CED62BF00DB71B3 /* MineViewController.m in Sources */,
 				788B34F71CED717A00DB71B3 /* AFURLResponseSerialization.m in Sources */,
 				788B34F61CED717A00DB71B3 /* AFURLRequestSerialization.m in Sources */,
+				7801FE741CFEB0E8001B7380 /* AddAddressViewController.m in Sources */,
 				78D7BB9F1CFC443B007CDA7E /* ShopModel.m in Sources */,
 				788B35A71CED9B6000DB71B3 /* UIButton+WebCache.m in Sources */,
 				78D7BB8D1CFBE663007CDA7E /* TypeDetailCollViewCell.m in Sources */,

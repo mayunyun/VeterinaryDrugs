@@ -11,3 +11,7 @@
 @implementation MineUserModel
 
 @end
+
+@implementation MineUserAddressListModel
+
+@end

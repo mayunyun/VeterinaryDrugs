@@ -8,6 +8,7 @@
 
 #import "AccountViewController.h"
 #import "Httptool.h"
+#import "LoginViewController.h"
 
 @interface AccountViewController ()
 {
@@ -25,8 +26,8 @@
     self.title = @"账号管理";
     self.view.backgroundColor = TabBarColor;
     _flag = 0;
-    [self creatNav];
     [self creatUI];
+    
 }
 
 - (void)creatUI
@@ -52,24 +53,6 @@
     [exitBtn addTarget:self action:@selector(exitBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)creatNav
-{
-    self.navigationItem.titleView = nil;
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = nil;
-    UIButton* leftbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    leftbtn.frame = CGRectMake(5, 0, 30, 30);
-    [leftbtn setImage:[UIImage imageNamed:@"sdhsjhds"] forState:UIControlStateNormal];
-    [leftbtn addTarget:self action:@selector(leftBarClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftbtn];
-    UIButton* rightbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightbtn.frame = CGRectMake(0, 0, 30, 30);
-    [rightbtn setImage:[UIImage imageNamed:@"icon_dote"] forState:UIControlStateNormal];
-    [rightbtn addTarget:self action:@selector(rightBarClick:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightbtn];
-    
-}
-
 - (void)creatRightView
 {
     _bgRightView = [[UIView alloc]initWithFrame:CGRectMake(mScreenWidth - 130, 0, 120, 150)];
@@ -93,81 +76,22 @@
     
     
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-- (void)leftBarClick:(UIButton*)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-- (void)rightBarClick:(UIButton*)sender
-{
-    _flag = !_flag;
-    if (_flag) {
-        NSLog(@"出现");
-        [UIView animateWithDuration:.5 animations:^{
-            [self creatRightView];
-        } completion:^(BOOL finished) {
-            
-            
-        }];
-        
-        
-    }else{
-        NSLog(@"隐藏");
-        
-        [UIView animateWithDuration:.5 animations:^{
-            [_bgRightView removeFromSuperview];
-//            [UIView setAnimationDuration:.5]; //动画时长
-//            [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:_bgRightView cache:YES];
-        } completion:^(BOOL finished) {
-            
-        }];
-        
-    }
-    
-
-}
-
-- (void)rightViewBtnClick:(UIButton*)sender
-{
-    switch (sender.tag) {
-        case 100:
-        {
-            [self.tabBarController setSelectedIndex:0];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
-            break;
-        case 101:
-        {
-            [self.tabBarController setSelectedIndex:1];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
-            break;
-        case 102:
-        {
-            [self.tabBarController setSelectedIndex:2];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
 - (void)exitBtnClick:(UIButton*)sender
 {
     if ([[[NSUserDefaults standardUserDefaults]objectForKey:IsLogin] isEqualToString:@"1"]) {
         //登录
         [self exitDataRequest];
+        
     }else{
         [Httptool showCustInfo:@"提示" MessageString:@"已经退出账号"];
     }
     
 }
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
 
 - (void)exitDataRequest
 {
@@ -182,19 +106,17 @@
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:kLoginUserName];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:kLoginUserKey];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:IsLogin];
+            LoginViewController* loginVC = [[LoginViewController alloc]init];
+            loginVC.typeLoginSource = typeTabBarMineToLogin;
+            [self.navigationController pushViewController:loginVC animated:YES];
         }
     } Failure:^(NSError *error) {
         
     }];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+
+
+
 
 @end

@@ -7,7 +7,8 @@
 //
 
 typedef enum {
-    typeHomeViewShopToLogin = 0,
+    typeNomalToLogin = 0,
+    typeHomeViewShopToLogin ,
     typeTabBarShopToLogin,
     typeTabBarMineToLogin,
 }	TypeLoginSource;

@@ -6,8 +6,8 @@
 //  Copyright © 2016年 济南联祥技术有限公司. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "MineNavCommonViewController.h"
 
-@interface AddressViewController : BaseViewController
+@interface AddressViewController : MineNavCommonViewController
 
 @end

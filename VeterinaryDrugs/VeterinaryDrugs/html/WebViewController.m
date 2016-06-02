@@ -26,8 +26,9 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
     self.tabBarController.tabBar.hidden = YES;
-    self.view.backgroundColor = NavBarColor;
     
+//    self.view.backgroundColor = NavBarColor;
+    [_webview reload];
     _HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSLog(@"%@",self.weburl);
     [_HUD show:YES];
@@ -67,10 +68,13 @@
 //    [cache setDiskCapacity:0];
 //    [cache setMemoryCapacity:0];
     //
+    UIView* view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, mScreenHeight, 20)];
+    view.backgroundColor = NavBarColor;
+    [self.view addSubview:view];
     _webview = [[UIWebView alloc]initWithFrame:CGRectMake(0, 20, mScreenWidth, mScreenHeight - 20)];
     _webview.delegate = self;
     [_webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.weburl]]];
-    [_webview goBack];
+//    [_webview goBack];
     [self.view addSubview:_webview];
     _webview.backgroundColor = [UIColor clearColor];
     _webview.opaque = NO;
