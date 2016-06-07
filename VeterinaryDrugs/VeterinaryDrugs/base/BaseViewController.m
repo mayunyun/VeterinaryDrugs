@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 
-@interface BaseViewController ()
+@interface BaseViewController ()<UIGestureRecognizerDelegate>
 
 @end
 
@@ -23,12 +23,18 @@
     }
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
     [((AppDelegate*)([UIApplication sharedApplication].delegate)) preferredStatusBarStyle];
-    
+//    //手势
+//    UISwipeGestureRecognizer * swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(backBtnAction:)];
+//    swipe.delegate = self;
+//    [self.view addGestureRecognizer:swipe];
    
 }
-
+- (void)backBtnAction:(id)sender
+{
+//    [self.navigationController popViewControllerAnimated:YES];
+}
 - (UIStatusBarStyle)preferredStatusBarStyle{
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleLightContent;
 }
 //横竖屏
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations
@@ -75,7 +81,7 @@
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     [manager POST:urlStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-            NSInteger code = [operation response].statusCode;
+//            NSInteger code = [operation response].statusCode;
             id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
         NSDictionary *dic = (NSDictionary *)json;
         NSLog(@"%@",dic);

@@ -12,7 +12,8 @@
 
 typedef void (^BeginBlock)();
 
-#define LeadPictures @[@"2015081204.jpg",@"2016020105.jpg",@"2016021853.jpg",@"2016021863.jpg"]
+#define LeadPictures @[@"guide1",@"guide2",@"guide3",@"guide4"]
+#define LeadPictures4 @[@"guide1-4s",@"guide2-4s",@"guide3-4s",@"guide4-4s"]
 
 @interface LeadScrollView : UIScrollView<UIScrollViewDelegate>
 

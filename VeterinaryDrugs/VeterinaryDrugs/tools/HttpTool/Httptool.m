@@ -7,6 +7,7 @@
 //
 
 #import "Httptool.h"
+//#import "NSObject+ViewController.h"
 
 @implementation Httptool
 
@@ -23,8 +24,41 @@
     {
         message = @"服务器错误发生，我们正在解决中";
     }
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"我知道了" otherButtonTitles:nil];
-    [alert show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* okAction = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alertController addAction:okAction];
+    [[Httptool getCurrentVC] presentViewController:alertController animated:YES completion:nil];
+}
+
+//获取当前屏幕显示的viewcontroller
++ (UIViewController *)getCurrentVC
+{
+    UIViewController *result = nil;
+    
+    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    if (window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tmpWin in windows)
+        {
+            if (tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    id nextResponder = [frontView nextResponder];
+    
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else
+        result = window.rootViewController;
+    
+    return result;
 }
 
 + (AFHTTPRequestOperationManager *)manager{
@@ -85,7 +119,10 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if(failure){
             failure(error);
+            
              NSLog(@"%@",[self intactUrlWithUrl:url]);
+            
+                [Httptool showCustInfo:[NSString stringWithFormat:@"%i",error.code] MessageString:error.localizedDescription];
         }
     }];
 }
@@ -113,5 +150,8 @@
         }
     }];
 }
+
+
+
 
 @end

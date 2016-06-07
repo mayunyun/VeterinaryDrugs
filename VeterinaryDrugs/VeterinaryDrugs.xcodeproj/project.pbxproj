@@ -10,6 +10,7 @@
 		7801FE741CFEB0E8001B7380 /* AddAddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7801FE731CFEB0E8001B7380 /* AddAddressViewController.m */; };
 		7801FE771CFEB315001B7380 /* MineNavCommonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7801FE761CFEB315001B7380 /* MineNavCommonViewController.m */; };
 		7801FE7C1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7801FE7B1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m */; };
+		78023D251D053C42008455A9 /* NSObject+ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78023D241D053C42008455A9 /* NSObject+ViewController.m */; };
 		78367A071CF3E4CC008EBD60 /* ShouYaoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 78367A061CF3E4CC008EBD60 /* ShouYaoVC.m */; };
 		78367A0B1CF3F14A008EBD60 /* index.css in Resources */ = {isa = PBXBuildFile; fileRef = 78367A081CF3F14A008EBD60 /* index.css */; };
 		78367A0C1CF3F14A008EBD60 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 78367A091CF3F14A008EBD60 /* index.html */; };
@@ -198,6 +199,8 @@
 		7801FE761CFEB315001B7380 /* MineNavCommonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineNavCommonViewController.m; sourceTree = "<group>"; };
 		7801FE7A1CFEDAF0001B7380 /* AddAddressProvCityTownModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddAddressProvCityTownModel.h; sourceTree = "<group>"; };
 		7801FE7B1CFEDAF0001B7380 /* AddAddressProvCityTownModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddAddressProvCityTownModel.m; sourceTree = "<group>"; };
+		78023D231D053C42008455A9 /* NSObject+ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+ViewController.h"; sourceTree = "<group>"; };
+		78023D241D053C42008455A9 /* NSObject+ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ViewController.m"; sourceTree = "<group>"; };
 		78367A051CF3E4CC008EBD60 /* ShouYaoVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShouYaoVC.h; sourceTree = "<group>"; };
 		78367A061CF3E4CC008EBD60 /* ShouYaoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShouYaoVC.m; sourceTree = "<group>"; };
 		78367A081CF3F14A008EBD60 /* index.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = index.css; sourceTree = "<group>"; };
@@ -497,6 +500,15 @@
 			name = "地址管理";
 			sourceTree = "<group>";
 		};
+		78023D1C1D0539D5008455A9 /* NSObject+ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				78023D231D053C42008455A9 /* NSObject+ViewController.h */,
+				78023D241D053C42008455A9 /* NSObject+ViewController.m */,
+			);
+			name = "NSObject+ViewController";
+			sourceTree = "<group>";
+		};
 		788B338E1CED4D6200DB71B3 = {
 			isa = PBXGroup;
 			children = (
@@ -627,6 +639,7 @@
 		788B33D51CED4E6A00DB71B3 /* tools */ = {
 			isa = PBXGroup;
 			children = (
+				78023D1C1D0539D5008455A9 /* NSObject+ViewController */,
 				788B35021CED998400DB71B3 /* 轮播图 */,
 				788B34D81CED70AD00DB71B3 /* HttpTool */,
 			);
@@ -1280,6 +1293,7 @@
 				78D7BB781CF68354007CDA7E /* PullingRefreshTableView.m in Sources */,
 				788B34201CED5B2700DB71B3 /* MBProgressHUD.m in Sources */,
 				78367A141CF43058008EBD60 /* WebViewController.m in Sources */,
+				78023D251D053C42008455A9 /* NSObject+ViewController.m in Sources */,
 				78D7BBA01CFC443B007CDA7E /* ShopViewCell.m in Sources */,
 				788B341E1CED5B2700DB71B3 /* UIView+HTErrorAnimation.m in Sources */,
 				788B35A01CED9B6000DB71B3 /* SDImageCache.m in Sources */,
@@ -1361,7 +1375,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: huiyong li (PT89MDQVSZ)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
@@ -1385,6 +1399,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1407,7 +1422,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lianxiang network technology jinan co., LTD";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -1424,6 +1439,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1433,12 +1449,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = VeterinaryDrugs/VeterinaryDrugs.pch;
 				INFOPLIST_FILE = VeterinaryDrugs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugs;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.yiruantong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1447,12 +1464,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = VeterinaryDrugs/VeterinaryDrugs.pch;
 				INFOPLIST_FILE = VeterinaryDrugs/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.VeterinaryDrugs;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lianxiang.yiruantong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

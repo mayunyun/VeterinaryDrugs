@@ -405,22 +405,18 @@
 //        NSLog(@"act=member_index----------%@------%@",dic,params);
         if ([[dic objectForKey:@"code"] integerValue]== kHttpStatusOK)
         {
-            NSDictionary* dict = dic[@"datas"][@"member_info"];
-            _mineModel = [[MineUserModel alloc]init];
-            [_mineModel setValuesForKeysWithDictionary:dict];
-            UIImageView* headerImgView = (UIImageView*)[self.view viewWithTag:200];
-            [headerImgView sd_setImageWithURL:[NSURL URLWithString:_mineModel.avator] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
-            UILabel* titleLabel = (UILabel*)[self.view viewWithTag:201];
-            [titleLabel setText:_mineModel.user_name];
-            UILabel* predepoitLabel = (UILabel*)[self.view viewWithTag:202];
-            [predepoitLabel setText:[NSString stringWithFormat:@"￥%@",_mineModel.predepoit]];
-            UIButton* pointLabel = (UIButton*)[self.view viewWithTag:203];
-            [pointLabel setTitle:[NSString stringWithFormat:@"%@张",_mineModel.point] forState:UIControlStateNormal];
-
-        }
-        else
-        {
-            [Httptool showCustInfo:nil MessageString:dic[@"datas"][@"error"]];
+                NSDictionary* dict = dic[@"datas"][@"member_info"];
+                _mineModel = [[MineUserModel alloc]init];
+                [_mineModel setValuesForKeysWithDictionary:dict];
+                UIImageView* headerImgView = (UIImageView*)[self.view viewWithTag:200];
+                [headerImgView sd_setImageWithURL:[NSURL URLWithString:_mineModel.avator] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+                UILabel* titleLabel = (UILabel*)[self.view viewWithTag:201];
+                [titleLabel setText:_mineModel.user_name];
+                UILabel* predepoitLabel = (UILabel*)[self.view viewWithTag:202];
+                [predepoitLabel setText:[NSString stringWithFormat:@"￥%@",_mineModel.predepoit]];
+                UIButton* pointLabel = (UIButton*)[self.view viewWithTag:203];
+                [pointLabel setTitle:[NSString stringWithFormat:@"%@张",_mineModel.point] forState:UIControlStateNormal];
+            
         }
         
     } Failure:^(NSError *error) {

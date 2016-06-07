@@ -48,7 +48,12 @@
     {
         UIImageView *leadPicture = [[UIImageView alloc] initWithFrame:self.bounds];
         leadPicture.left = i * self.width;
-        leadPicture.image = [UIImage imageNamed:LeadPictures[i]];
+        if (iPhone4) {
+            leadPicture.image = [UIImage imageNamed:LeadPictures4[i]];
+        }else{
+            leadPicture.image = [UIImage imageNamed:LeadPictures[i]];
+        }
+        
         [self addSubview:leadPicture];
     }
 }

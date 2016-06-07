@@ -76,7 +76,8 @@
     //ios<7.0
 //        textAttrs[UITextAttributeFont] = [UIFont fontWithName:@"STHeitiSC-Light" size:15.0];
 //        textAttrs[UITextAttributeTextColor] = [UIColor colorWithHexString:@"3a3a3a"];
-    textAttrs[UITextAttributeTextShadowOffset] = [NSValue valueWithUIOffset:UIOffsetZero];
+    textAttrs
+        [UITextAttributeTextShadowOffset] = [NSValue valueWithUIOffset:UIOffsetZero];
     //ios>7.0
     textAttrs[NSFontAttributeName] = [UIFont fontWithName:@"STHeitiSC-Light" size:15.0];
     textAttrs[NSForegroundColorAttributeName] = [UIColor colorWithHexString:@"3a3a3a"];

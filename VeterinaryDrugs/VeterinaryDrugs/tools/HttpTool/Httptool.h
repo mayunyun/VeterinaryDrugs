@@ -55,7 +55,7 @@ typedef void(^FailuredBlock)(void);
 @property (nonatomic, copy) FailuredBlock failureBlock;
 
 + (void)showCustInfo:(NSString*)title MessageString:(NSString*)message;
-
++ (UIViewController *)getCurrentVC;
 /**
  * GET请求
  */

@@ -10,8 +10,6 @@
 
 @interface BaseViewController : UIViewController
 - (BOOL)isLoginSeccessWap:(NSString*)client username:(NSString*)user password:(NSString*)pwd;
-
-- (BOOL)ConnectYesOrNo;
 //删除多余的cell
 - (void)setExtraCellLineHidden: (UITableView *)tableView;
 

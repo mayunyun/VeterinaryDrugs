@@ -56,7 +56,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - Core Data stack
