@@ -205,3 +205,53 @@
 
 
 @end
+
+
+
+@interface UIWebView (JavaScriptAlert)
+-(void) webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame;
+- (BOOL)webView:(UIWebView *)sender runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame;
+@end
+
+@implementation UIWebView (JavaScriptAlert)
+
+- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [sender.viewController presentViewController:alertController animated:YES completion:nil];
+    
+    //    UIAlertView* customAlert = [[UIAlertView alloc] initWithTitle:@"助手提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    //    [customAlert show];
+}
+static BOOL diagStat = NO;
+static NSInteger bIdx = -1;
+- (BOOL)webView:(UIWebView *)sender runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame {
+    UIAlertView *confirmDiag = [[UIAlertView alloc] initWithTitle:@"助手提示"
+                                                          message:message
+                                                         delegate:self
+                                                cancelButtonTitle:@"取消"
+                                                otherButtonTitles:@"确定",nil];
+    
+    [confirmDiag show];
+    
+    bIdx = -1;
+    
+    while (bIdx==-1) {
+        //[NSThread sleepForTimeInterval:0.2];
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1f]];
+    }
+    if (bIdx == 0){//取消;
+        diagStat = NO;
+    }
+    else if (bIdx == 1) {//确定;
+        diagStat = YES;
+    }
+    return diagStat;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    bIdx = buttonIndex;
+}
+
+@end
+
+

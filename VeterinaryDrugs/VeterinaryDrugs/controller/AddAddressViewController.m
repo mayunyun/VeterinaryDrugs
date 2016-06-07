@@ -41,8 +41,6 @@
     
     [self creatUI];
     
-    
-    
 }
 
 - (void)creatUI
@@ -53,7 +51,11 @@
     bgScrollView.bounces = NO;
     bgScrollView.showsVerticalScrollIndicator = NO;
     bgScrollView.showsHorizontalScrollIndicator = NO;
-    bgScrollView.contentSize = CGSizeMake(mScreenWidth, 740);
+    if (self.typeAddAddress == typeAdd) {
+        bgScrollView.contentSize = CGSizeMake(mScreenWidth, 800);
+    }else{
+        bgScrollView.contentSize = CGSizeMake(mScreenWidth, 900);
+    }
     [self.view addSubview:bgScrollView];
     UIView* userView = [[UIView alloc]initWithFrame:CGRectMake(5, 10, mScreenWidth - 10, 300)];
     [bgScrollView addSubview:userView];
@@ -61,6 +63,10 @@
     UIView* textFView = [[UIView alloc]initWithFrame:CGRectMake(20, 40, userView.width - 20, userView.height - 40)];
     [userView addSubview:textFView];
     NSArray* userLabelTextArr = @[@"姓名：（*必填）",@"手机号码：（*必填）",@"电话号码："];
+    NSArray* editText = [NSArray array];
+    if (!IsEmptyValue(self.editModel)&&self.typeAddAddress == typeEdit) {
+         editText= @[self.editModel.true_name,self.editModel.mob_phone,self.editModel.tel_phone];
+    }
     for (int i = 0; i < 3; i ++) {
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 80*i, textFView.width, 40)];
         label.text = userLabelTextArr[i];
@@ -73,15 +79,67 @@
         textField.tag = 100+i;
         textField.delegate = self;
         [textFView addSubview:textField];
+        if (!IsEmptyValue(editText)&&self.typeAddAddress == typeEdit) {
+            textField.text = editText[i];
+        }
     }
     
+    if(self.typeAddAddress == typeAdd){
+        UIView* addressView = [[UIView alloc]initWithFrame:CGRectMake(userView.left, userView.bottom, userView.width, 500)];
+        [bgScrollView addSubview:addressView];
+        [self creatLabelTag:addressView text:@"地址信息"];
+        UIView* provCityTownView = [[UIView alloc]initWithFrame:CGRectMake(20, 40, addressView.width - 20, addressView.height)];
+        [addressView addSubview:provCityTownView];
+        [self cteatProvCityTownUIbgView:provCityTownView];
+        UIButton* sendBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        sendBtn.frame = CGRectMake(10, 430 , mScreenWidth - 20, 40);
+        sendBtn.layer.masksToBounds = YES;
+        sendBtn.layer.cornerRadius = 5;
+        [sendBtn setBackgroundColor:[UIColor redColor]];
+        [sendBtn setTitle:@"保存地址" forState:UIControlStateNormal];
+        [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [sendBtn addTarget:self action:@selector(SendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [addressView addSubview:sendBtn];
+    }else{
+        UIView* addressView = [[UIView alloc]initWithFrame:CGRectMake(userView.left, userView.bottom, userView.width, 500)];
+        [bgScrollView addSubview:addressView];
+        [self creatLabelTag:addressView text:@"地址信息"];
+        UILabel* add_infoLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 40, addressView.width - 20, 40)];
+        add_infoLabel.text = self.editModel.area_info;
+        [addressView addSubview:add_infoLabel];
+        UILabel* addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, add_infoLabel.bottom, add_infoLabel.width, add_infoLabel.height)];
+        addressLabel.text = self.editModel.address;
+        [addressView addSubview:add_infoLabel];
+        UIButton* editBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        editBtn.frame = CGRectMake(addressLabel.left, addressLabel.bottom, addressLabel.width, 40);
+        [editBtn addTarget:self action:@selector(editBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [addressView addSubview:editBtn];
+        UIView* provCityTownView = [[UIView alloc]initWithFrame:CGRectMake(20, editBtn.bottom, addressView.width - 40, 460)];
+        [addressView addSubview:provCityTownView];
+        [self cteatProvCityTownUIbgView:provCityTownView];
+        
+        UIButton* sendBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        sendBtn.frame = CGRectMake(10, 430 , mScreenWidth - 20, 40);
+        sendBtn.layer.masksToBounds = YES;
+        sendBtn.layer.cornerRadius = 5;
+        [sendBtn setBackgroundColor:[UIColor redColor]];
+        [sendBtn setTitle:@"保存地址" forState:UIControlStateNormal];
+        [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [sendBtn addTarget:self action:@selector(SendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [addressView addSubview:sendBtn];
     
-    UIView* addressView = [[UIView alloc]initWithFrame:CGRectMake(userView.left, userView.bottom, userView.width, 500)];
-    [bgScrollView addSubview:addressView];
-    [self creatLabelTag:addressView text:@"地址信息"];
-    UIView* addBtnView = [[UIView alloc]initWithFrame:CGRectMake(20, 40, addressView.width - 20, addressView.height)];
+    }
+
+    
+    
+}
+
+- (void)cteatProvCityTownUIbgView:(UIView*)addressView
+{
+    //
+    UIView* addBtnView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, addressView.width - 20, addressView.height)];
     [addressView addSubview:addBtnView];
-    NSArray* addTextLabelArr = @[@"省份：（*必填）",@"城市：（*必填）",@"区县：（*必填）",@"街道：（*必填）"];
+    NSArray* addTextLabelArr = @[@"省份：（*必填）",@"城市：（*必填）",@"区县：（*必填）",@"街道：（*必填 "];
     for (int i = 0; i < 4; i ++) {
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 80*i, addBtnView.width, 40)];
         label.text = addTextLabelArr[i];
@@ -108,16 +166,10 @@
             [btn addSubview:imgView];
         }
     }
-    UIButton* sendBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [sendBtn setBackgroundColor:[UIColor redColor]];
-    [sendBtn setTitle:@"提交" forState:UIControlStateNormal];
-    [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [sendBtn addTarget:sendBtn action:@selector(SendBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:sendBtn];
-    
-    
-    
+
 }
+
+
 - (void)creatLabelTag:(UIView*)bgView text:(NSString*)text
 {
     UIView* view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, bgView.width, 40)];
@@ -189,7 +241,10 @@
     [self saveAddRequestData];
 }
 
+- (void)editBtnClick:(UIButton*)sender
+{
 
+}
 - (void)creatTableViewUI:(NSInteger)index
 {
     self.m_keHuPopView = [[UIView alloc]initWithFrame:self.view.bounds];
@@ -435,30 +490,33 @@
     UIButton* provBtn = (UIButton*)[self.view viewWithTag:200];
     UIButton* cityBtn = (UIButton*)[self.view viewWithTag:201];
     UIButton* townBtn = (UIButton*)[self.view viewWithTag:202];
-    NSString* url = @"index.php?act=member_address&op=address_add";
-    NSMutableDictionary* parmas = [[NSMutableDictionary alloc]init];
-    [parmas setObject:[[NSUserDefaults standardUserDefaults] objectForKey:kLoginUserKey] forKey:@"key"];
-//    if (!IsEmptyValue(nameField.text)&&!IsEmptyValue(mobileField.text)&&!IsEmptyValue(phoneField.text)&&!IsEmptyValue(_city_id)&&!IsEmptyValue(_prov_id)&&!IsEmptyValue(_streetTextView.text)&&!IsEmptyValue(provBtn.titleLabel.text)&&!IsEmptyValue(<#id thing#>)&&&&&&) {
-//        
-//    }
-    [parmas setObject:nameField.text forKey:@"true_name"];
-    [parmas setObject:mobileField.text forKey:@"mob_phone"];
-    [parmas setObject:phoneField.text forKey:@"tel_phone"];
-    [parmas setObject:_city_id forKey:@"city_id"];
-    [parmas setObject:_prov_id forKey:@"area_id"];
-    [parmas setObject:_streetTextView.text forKey:@"address"];
-    [parmas setObject:[NSString stringWithFormat:@"%@ %@ %@",provBtn.titleLabel.text ,cityBtn.titleLabel.text,townBtn.titleLabel.text] forKey:@"area_info"];
-    [Httptool postWithURL:url Params:parmas Success:^(id json, HttpCode code) {
-        NSDictionary* dic = (NSDictionary*)json;
-        if ([dic[@"code"] integerValue] == kHttpStatusOK) {
-            NSLog(@"saveAddRequestDatadic-------%@",dic);
-            [self.navigationController popViewControllerAnimated:YES];
-        }else{
-        
-        }
-    } Failure:^(NSError *error) {
-        
-    }];
+    if (!IsEmptyValue(nameField.text)&&!IsEmptyValue(mobileField.text)&&!IsEmptyValue(_city_id)&&!IsEmptyValue(_prov_id)&&!IsEmptyValue(_streetTextView.text)&&!IsEmptyValue(provBtn.titleLabel.text)&&!IsEmptyValue(cityBtn.titleLabel.text)&&!IsEmptyValue(townBtn.titleLabel.text)) {
+        NSString* url = @"index.php?act=member_address&op=address_add";
+        NSMutableDictionary* parmas = [[NSMutableDictionary alloc]init];
+        [parmas setObject:[[NSUserDefaults standardUserDefaults] objectForKey:kLoginUserKey] forKey:@"key"];
+        [parmas setObject:nameField.text forKey:@"true_name"];
+        [parmas setObject:mobileField.text forKey:@"mob_phone"];
+        [parmas setObject:phoneField.text forKey:@"tel_phone"];
+        [parmas setObject:_city_id forKey:@"city_id"];
+        [parmas setObject:_prov_id forKey:@"area_id"];
+        [parmas setObject:_streetTextView.text forKey:@"address"];
+        [parmas setObject:[NSString stringWithFormat:@"%@ %@ %@",provBtn.titleLabel.text ,cityBtn.titleLabel.text,townBtn.titleLabel.text] forKey:@"area_info"];
+        [Httptool postWithURL:url Params:parmas Success:^(id json, HttpCode code) {
+            NSDictionary* dic = (NSDictionary*)json;
+            if ([dic[@"code"] integerValue] == kHttpStatusOK) {
+                NSLog(@"saveAddRequestDatadic-------%@",dic);
+                [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                
+            }
+        } Failure:^(NSError *error) {
+            
+        }];
+
+    }else{
+        [Httptool showCustInfo:@"提示" MessageString:@"有空值"];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning {

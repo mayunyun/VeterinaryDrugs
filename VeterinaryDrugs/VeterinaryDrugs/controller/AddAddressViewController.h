@@ -11,11 +11,12 @@ typedef enum {
     typeEdit ,
 }	TypeAddAddress;
 
-
+#import "MineUserModel.h"
 #import "MineNavCommonViewController.h"
 
 @interface AddAddressViewController : MineNavCommonViewController
 
 @property (nonatomic)TypeAddAddress typeAddAddress;
+@property (nonatomic,strong)MineUserAddressListModel* editModel;
 
 @end

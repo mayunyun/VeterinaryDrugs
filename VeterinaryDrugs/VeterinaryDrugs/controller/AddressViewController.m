@@ -17,11 +17,11 @@
 @property (nonatomic,strong)UITableView* tbView;
 @property (nonatomic,strong)UIView* noneView;
 @property (nonatomic,strong)NSMutableArray* dataArray;
-@property (nonatomic,strong)UIView* cellBgView;
-@property (nonatomic,strong)UILabel* nameLabel;
-@property (nonatomic,strong)UILabel* addressLabel;
-@property (nonatomic,strong)UILabel* addressDetailLabel;
-@property (nonatomic,strong)UILabel* telLabel;
+//@property (nonatomic,strong)UIView* cellBgView;
+//@property (nonatomic,strong)UILabel* nameLabel;
+//@property (nonatomic,strong)UILabel* addressLabel;
+//@property (nonatomic,strong)UILabel* addressDetailLabel;
+//@property (nonatomic,strong)UILabel* telLabel;
 @property (nonatomic,strong)UIButton* editBtn;
 @property (nonatomic,strong)UIButton* delBtn;
 
@@ -36,10 +36,14 @@
     // Do any additional setup after loading the view.
     self.title = @"地址管理";
     [self creatUI];
-    [self addressRequestData];
     
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self addressRequestData];
+}
 - (void)creatUI
 {
     _tbView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, mScreenWidth, mScreenHeight - 64) style:UITableViewStylePlain];
@@ -84,33 +88,33 @@
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* cellID = @"cellID";
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-    }
+//    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+//    if (!cell) {
+      UITableViewCell*  cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+//    }
 //    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.contentView.frame = CGRectMake(0, 0, mScreenWidth, 130);
-    _cellBgView = [[UIView alloc]initWithFrame:CGRectMake(10, 5, cell.contentView.width - 20, cell.contentView.height - 10)];
-    [cell.contentView addSubview:_cellBgView];
-    CALayer *layer = [_cellBgView layer];
+    UIView* cellBgView = [[UIView alloc]initWithFrame:CGRectMake(10, 5, cell.contentView.width - 20, cell.contentView.height - 10)];
+    [cell.contentView addSubview:cellBgView];
+    CALayer *layer = [cellBgView layer];
     layer.borderColor = [UIColor lightGrayColor].CGColor;
     layer.borderWidth = .5f;
     
-    _nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, _cellBgView.width, 30)];
-    [_cellBgView addSubview:_nameLabel];
-    _addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _nameLabel.bottom, _cellBgView.width, 30)];
-    [_cellBgView addSubview:_addressLabel];
+    UILabel* nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, cellBgView.width, 30)];
+    [cellBgView addSubview:nameLabel];
+    UILabel* addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, nameLabel.bottom, cellBgView.width, 30)];
+    [cellBgView addSubview:addressLabel];
     
-    _addressDetailLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _addressLabel.bottom, _cellBgView.width, 30)];
-    [_cellBgView addSubview:_addressDetailLabel];
+    UILabel* addressDetailLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, addressLabel.bottom, cellBgView.width, 30)];
+    [cellBgView addSubview:addressDetailLabel];
     
-    _telLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, _addressDetailLabel.bottom, _cellBgView.width, 30)];
-    [_cellBgView addSubview:_telLabel];
+    UILabel* telLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, addressDetailLabel.bottom, cellBgView.width, 30)];
+    [cellBgView addSubview:telLabel];
 
     
-    UIView* view = [[UIView alloc]initWithFrame:CGRectMake(_cellBgView.width - 100, _addressDetailLabel.bottom, 100, 30)];
-    [_cellBgView addSubview:view];
+    UIView* view = [[UIView alloc]initWithFrame:CGRectMake(cellBgView.width - 100, addressDetailLabel.bottom, 100, 30)];
+    [cellBgView addSubview:view];
     _editBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     _editBtn.frame = CGRectMake(0, 0, 49, 30);
     _editBtn.tag = 100+indexPath.row;
@@ -129,14 +133,13 @@
     [_delBtn addTarget:self action:@selector(delBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     if (!IsEmptyValue(_dataArray)) {
         MineUserAddressListModel* model = _dataArray[indexPath.row];
-        _nameLabel.text = model.true_name;
-        _addressLabel.text = model.area_info;
-        _addressDetailLabel.text = model.address;
-        _telLabel.text = model.mob_phone;
+        nameLabel.text = model.true_name;
+        addressLabel.text = model.area_info;
+        addressDetailLabel.text = model.address;
+        telLabel.text = model.mob_phone;
     }else{
         
     }
-    
     return cell;
 }
 
@@ -153,9 +156,13 @@
 
 - (void)editBtnClick:(UIButton*)sender
 {
-    AddAddressViewController* addAddVC = [[AddAddressViewController alloc]init];
-    addAddVC.typeAddAddress = typeEdit;
-    [self.navigationController pushViewController:addAddVC animated:YES];
+    if (!IsEmptyValue(_dataArray)) {
+        
+        AddAddressViewController* addAddVC = [[AddAddressViewController alloc]init];
+        addAddVC.editModel = _dataArray[sender.tag - 100];
+        addAddVC.typeAddAddress = typeEdit;
+        [self.navigationController pushViewController:addAddVC animated:YES];
+    }
 }
 - (void)delBtnClick:(UIButton*)sender
 {
