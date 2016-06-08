@@ -30,7 +30,6 @@
 @property (nonatomic,strong)UIWebView* webView;
 @property (nonatomic,strong)UIScrollView* bgScrollView;
 @property (nonatomic,strong)EScrollerView* adView;
-@property (nonatomic,strong)UITableView* shopAndSelarTbView;
 @property (nonatomic,strong)FirstCollectionView* collView;
 @property (nonatomic,strong)SecondCollectionView* secondCollectionView;
 @property (nonatomic,strong)UIScrollView* selarBottomView;
@@ -154,11 +153,7 @@
     [_searchTextField setPlaceholder:@"  输入商品查找"];
     [searchBtn addSubview:_searchTextField];
     
-
-}
-- (void)creatUI
-{
-    _bgScrollView = [[UIScrollView alloc]initWithFrame:self.view.bounds];
+    _bgScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, mScreenWidth, mScreenHeight - 49)];
     _bgScrollView.showsVerticalScrollIndicator = NO;
     _bgScrollView.scrollsToTop = YES;
     _bgScrollView.scrollEnabled = YES;
@@ -172,80 +167,205 @@
     //添加事件
     [refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     [_bgScrollView addSubview:refreshControl];
-    
+
+}
+- (void)creatUI
+{
 
     UIImageView* adbgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, mScreenWidth, 120)];
     adbgView.image = [UIImage imageNamed:@"default_img_banner"];
     adbgView.backgroundColor = [UIColor clearColor];
     [_bgScrollView addSubview:adbgView];
     
-    NSArray* btn1Arr = @[@"img_navi01",@"img_navi04",@"img_navi06",@"img_navi07",@"img_navi08",@"img_navi02",@"img_navi05",@"img_navi09"];
-    NSArray* btn1LabelArr = @[@"精品推荐",@"畜类用品",@"禽类用品",@"水产用药",@"宠物用药",@"药品包装",@"化学药剂",@"设备仪器"];
-    for (int i = 0; i < 2; i ++) {
-        for (int  j =0; j < 4; j++) {
-            UIImageView* imgView = [[UIImageView alloc]initWithFrame:CGRectMake((mScreenWidth*0.25-44)/2+j*mScreenWidth*0.25,5+adbgView.bottom+i*75, 44, 44)];
-            imgView.tag = 100+i*4+j;
-            imgView.image = [UIImage imageNamed:btn1Arr[j+i*4]];
-            [_bgScrollView addSubview:imgView];
-            
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(j*mScreenWidth*0.25, adbgView.bottom+55+i*75, mScreenWidth*0.25, 20)];
-            label.tag = 100+i*4+j;
-            label.text = btn1LabelArr[j+i*4];
-            label.font = [UIFont systemFontOfSize:13];
-            label.textAlignment = NSTextAlignmentCenter;
-            [_bgScrollView addSubview:label];
-            
-            UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            btn.frame = CGRectMake(j*mScreenWidth*0.25,adbgView.bottom+i*75, mScreenWidth*0.25, 75);
-            btn.tag = 100+i*4+j;
-            [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-            [_bgScrollView addSubview:btn];
-        }
-    }
-    UILabel* lineFirstLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, adbgView.bottom+150+9, mScreenWidth, 1)];
-    lineFirstLabel.backgroundColor = LineColor;
-    [_bgScrollView addSubview:lineFirstLabel];
-    
-    UIView* limitTimeView = [[UIView alloc]initWithFrame:CGRectMake(0, 10+lineFirstLabel.bottom, mScreenWidth, 340)];
-    limitTimeView.tag = 1000;
-    [_bgScrollView addSubview:limitTimeView];
-    for (int i = 0; i <2; i++) {
-        for (int j = 0; j < 2; j ++) {
-            UIImageView* imgView = [[UIImageView alloc]initWithFrame:CGRectMake(j*mScreenWidth*0.5, i*82.5, limitTimeView.width/2, 82.5)];
-            imgView.userInteractionEnabled = YES;
-            [self framAdd:imgView];
-            imgView.tag = 200+i*2+j;
-            imgView.image = [UIImage imageNamed:@"default_img_banner"];
-            [limitTimeView addSubview:imgView];
-            UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
-            [imgView addGestureRecognizer:tap];
-        }
-    }
-    UIImageView* leftlimitView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 10+165, limitTimeView.width/2, limitTimeView.height-10-165)];
-    leftlimitView.userInteractionEnabled = YES;
-    leftlimitView.image = [UIImage imageNamed:@"default_img_banner"];
-    [self framAdd:leftlimitView];
-    leftlimitView.tag = 200+4;
-    [limitTimeView addSubview:leftlimitView];
-    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
-    [leftlimitView addGestureRecognizer:tap];
-    for (int i = 0; i < 2; i ++) {
-        UIImageView* rightView = [[UIImageView alloc]initWithFrame:CGRectMake(limitTimeView.width/2, 10+165+i*leftlimitView.height/2, limitTimeView.width/2, leftlimitView.height/2)];
-        rightView.userInteractionEnabled = YES;
-        rightView.image = [UIImage imageNamed:@"default_img_banner"];
-        [self framAdd:rightView];
-        rightView.tag = 205+i;
-        [limitTimeView addSubview:rightView];
-        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
-        [rightView addGestureRecognizer:tap];
-    }
-    
-    _shopAndSelarTbView = [[UITableView alloc]initWithFrame:CGRectMake(0, 5+limitTimeView.bottom, mScreenWidth, 1100) style:UITableViewStylePlain];
-    _shopAndSelarTbView.delegate = self;
-    _shopAndSelarTbView.dataSource = self;
-    _shopAndSelarTbView.scrollEnabled = NO;
-    [_bgScrollView addSubview:_shopAndSelarTbView];
 }
+//模板一
+- (CGFloat)creatFirstArr:(NSArray*)dataArr titleArr:(NSArray*)btnLabelArr currentHeight:(CGFloat)currentHeight
+{
+    if (dataArr.count == 8) {
+        NSArray* btn1Arr = dataArr;
+        NSArray* btn1LabelArr = btnLabelArr;
+        for (int i = 0; i < 2; i ++) {
+            for (int  j =0; j < 4; j++) {
+                UIImageView* imgView = [[UIImageView alloc]initWithFrame:CGRectMake((mScreenWidth*0.25-44)/2+j*mScreenWidth*0.25,5+currentHeight+i*75, 44, 44)];
+                imgView.tag = 100+i*4+j;
+                imgView.image = [UIImage imageNamed:btn1Arr[j+i*4]];
+                [_bgScrollView addSubview:imgView];
+                
+                UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(j*mScreenWidth*0.25, currentHeight+55+i*75, mScreenWidth*0.25, 20)];
+                label.tag = 100+i*4+j;
+                label.text = btn1LabelArr[j+i*4];
+                label.font = [UIFont systemFontOfSize:13];
+                label.textAlignment = NSTextAlignmentCenter;
+                [_bgScrollView addSubview:label];
+                
+                UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                btn.frame = CGRectMake(j*mScreenWidth*0.25,currentHeight+i*75, mScreenWidth*0.25, 75);
+                btn.tag = 100+i*4+j;
+                [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+                [_bgScrollView addSubview:btn];
+            }
+        }
+        return 150+currentHeight;
+    }else{
+        return currentHeight;
+    }
+}
+
+- (CGFloat)creatSecondArr:(NSArray*)dataArr currentHeight:(CGFloat)currentHeight
+{
+    if (dataArr.count == 8) {
+        UILabel* lineFirstLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, currentHeight-1, mScreenWidth, 1)];
+        lineFirstLabel.backgroundColor = LineColor;
+        [_bgScrollView addSubview:lineFirstLabel];
+        
+        UIView* limitTimeView = [[UIView alloc]initWithFrame:CGRectMake(0, 10+lineFirstLabel.bottom, mScreenWidth, 230)];
+        limitTimeView.tag = 1000;
+        [_bgScrollView addSubview:limitTimeView];
+        for (int i = 0; i <2; i++) {
+            for (int j = 0; j < 2; j ++) {
+                UIImageView* imgView = [[UIImageView alloc]initWithFrame:CGRectMake(j*mScreenWidth*0.5, i*65, limitTimeView.width/2, 65)];
+                imgView.userInteractionEnabled = YES;
+                [self framAdd:imgView];
+                imgView.tag = 200+i*2+j;
+                [imgView sd_setImageWithURL:dataArr[i*2+j] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+//                imgView.image = [UIImage imageNamed:@"default_img_banner"];
+                [limitTimeView addSubview:imgView];
+                UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
+                [imgView addGestureRecognizer:tap];
+            }
+        }
+        for (int i = 0; i < 4; i ++) {
+            UIImageView* rightView = [[UIImageView alloc]initWithFrame:CGRectMake(limitTimeView.width/4*i, 130, limitTimeView.width/4, 100)];
+            rightView.userInteractionEnabled = YES;
+            [rightView sd_setImageWithURL:dataArr[4+i] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+//            rightView.image = [UIImage imageNamed:@"default_img_banner"];
+            [self framAdd:rightView];
+            rightView.tag = 204+i;
+            [limitTimeView addSubview:rightView];
+            UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
+            [rightView addGestureRecognizer:tap];
+        }
+
+        return currentHeight+230;
+        
+    }else{
+        return currentHeight;
+    }
+}
+//模板三
+- (CGFloat)creatThirdArr:(NSArray*)dataArr currentHeight:(CGFloat)currentHeight
+{
+    if (dataArr.count == 6) {
+        UILabel* lineFirstLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, currentHeight-1, mScreenWidth, 1)];
+        lineFirstLabel.backgroundColor = LineColor;
+        [_bgScrollView addSubview:lineFirstLabel];
+        
+        UIView* limitTimeView = [[UIView alloc]initWithFrame:CGRectMake(0, 10+lineFirstLabel.bottom, mScreenWidth, 160)];
+        limitTimeView.tag = 2000;
+        [_bgScrollView addSubview:limitTimeView];
+        for (int i = 0; i <2; i++) {
+                UIImageView* imgView = [[UIImageView alloc]initWithFrame:CGRectMake(i*mScreenWidth*0.5, 0, limitTimeView.width/2, 77)];
+                imgView.userInteractionEnabled = YES;
+                [self framAdd:imgView];
+                imgView.tag = 300+i;
+                [imgView sd_setImageWithURL:dataArr[i] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+                //                imgView.image = [UIImage imageNamed:@"default_img_banner"];
+                [limitTimeView addSubview:imgView];
+                UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
+                [imgView addGestureRecognizer:tap];
+        }
+        for (int i = 0; i < 4; i ++) {
+            UIImageView* rightView = [[UIImageView alloc]initWithFrame:CGRectMake(limitTimeView.width/4*i, 85, limitTimeView.width/4, 75)];
+            rightView.userInteractionEnabled = YES;
+            [rightView sd_setImageWithURL:[NSURL URLWithString:dataArr[2+i]] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+            //            rightView.image = [UIImage imageNamed:@"default_img_banner"];
+            [self framAdd:rightView];
+            rightView.tag = 302+i;
+            [limitTimeView addSubview:rightView];
+            UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(limitImgClick:)];
+            [rightView addGestureRecognizer:tap];
+        }
+        return currentHeight+160;
+        
+    }else{
+        return currentHeight;
+    }
+}
+//模块4，tag值400
+- (CGFloat)creatForthArr:(NSString*)imgUrl currentHeight:(CGFloat)currentHeight
+{
+    UIButton* imgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    imgBtn.frame = CGRectMake(0, currentHeight, mScreenWidth, 40);
+    [_bgScrollView addSubview:imgBtn];
+    imgBtn.tag = 400;
+    UIImageView* imgView = [[UIImageView alloc]initWithFrame:imgBtn.bounds];
+    [imgView sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+    [imgBtn addSubview:imgView];
+    [imgBtn addTarget:self action:@selector(imgForthBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    return 40+currentHeight;
+}
+
+- (CGFloat)creatFirthArr:(NSArray*)dataArr currentHeight:(CGFloat)currentHeight
+{
+    for (int i =0; i < dataArr.count; i++) {
+        UIImageView* imgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, currentHeight+190*i, mScreenWidth, 190)];
+        imgView.tag = 500+i;
+        imgView.userInteractionEnabled = YES;
+        [imgView sd_setImageWithURL:[NSURL URLWithString:dataArr[i]] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+        [_bgScrollView addSubview:imgView];
+        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imgFirthBtnClick:)];
+        [imgView addGestureRecognizer:tap];
+    }
+    return dataArr.count*190+currentHeight;
+}
+//模板6
+- (CGFloat)creatSixArr:(NSArray*)dataArr currentHeight:(CGFloat)currentHeight
+{
+    if (!IsEmptyValue(dataArr)) {
+        _selarBottomView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, currentHeight , mScreenWidth, 150)];
+        _selarBottomView.scrollsToTop = NO;
+        _selarBottomView.bounces = NO;
+        _selarBottomView.showsHorizontalScrollIndicator = NO;
+        _selarBottomView.showsVerticalScrollIndicator = NO;
+        [_bgScrollView addSubview:_selarBottomView];
+        _selarBottomView.contentSize = CGSizeMake(_selarBottomView.width, _selarBottomView.height);
+        
+        _secondCollectionView = [[SecondCollectionView alloc]initWithFrame:CGRectMake(0, 0, 1700, 150)];
+        _secondCollectionView.delegate = self;
+        _secondCollectionView.scrollEnabled = YES;
+        _secondCollectionView.scrollsToTop = NO;
+        _secondCollectionView.contentSize = CGSizeMake(_secondCollectionView.width, 150);
+        _secondCollectionView.dataArr = dataArr;
+        [_selarBottomView addSubview:_secondCollectionView];
+        return 150+currentHeight;
+    }else{
+        return currentHeight;
+    }
+   
+}
+//模板7
+- (CGFloat)creatSevenArr:(NSArray*)dataArr imgUrl:(NSString*)imgurl currentHeight:(CGFloat)currentHeight
+{
+    if (!IsEmptyValue(dataArr)) {
+        UIImageView* imgView = [[UIImageView alloc]init];
+        imgView.frame = CGRectMake(0, currentHeight, mScreenWidth, 40);
+        [imgView sd_setImageWithURL:[NSURL URLWithString:imgurl] placeholderImage:[UIImage imageNamed:@"default_img_banner"]];
+        [_bgScrollView addSubview:imgView];
+        
+        _collView = [[FirstCollectionView alloc]initWithFrame:CGRectMake(0, currentHeight+40, mScreenWidth, [self array:dataArr rowNum:2]*89)];
+        _collView.delegate = self;
+        _collView.bounces = NO;
+        _collView.scrollsToTop = NO;
+        _collView.scrollEnabled = NO;
+        _collView.dataArr = dataArr;
+        [_bgScrollView addSubview:_collView];
+        return 40+currentHeight+[self array:dataArr rowNum:2]*89;
+    }else{
+        return currentHeight;
+    }
+}
+
+
 
 - (void)creatLabelTag:(UIView*)bgView tab:(NSInteger)index text:(NSString*)text
 {
@@ -386,6 +506,15 @@
     webViewVC.weburl = [NSString stringWithFormat:@"%@/tmpl/product_detail.html?goods_id=100122",ShouYaoWapServer];
     [self.navigationController pushViewController:webViewVC animated:YES];
 }
+- (void)imgForthBtnClick:(UIButton*)sender
+{
+    
+}
+
+- (void)imgFirthBtnClick:(UITapGestureRecognizer*)tap
+{
+
+}
 
 #pragma mark ScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -405,151 +534,6 @@
 }
 
 
-#pragma mark UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    if (tableView == _shopAndSelarTbView) {
-        return 2;
-    }else{
-        return 1;
-    }
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (tableView == _shopAndSelarTbView) {
-        return 1;
-    }else{
-        return 0;
-    }
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (tableView == _shopAndSelarTbView) {
-        if (indexPath.section == 0) {
-            if (!IsEmptyValue(_shopArr)) {
-                return 89*[self array:_shopArr rowNum:2]+10;
-            }
-            return 0;
-        }else{
-            if (!IsEmptyValue(_selarArr)) {
-                return _selarArr.count*400;
-            }
-            return 0;
-        }
-    }else{
-        return 0;
-    }
-}
-//页头高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (tableView == _shopAndSelarTbView) {
-        return 40;
-    }
-    return 0;
-}
-
-//自定义页头
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (tableView == _shopAndSelarTbView) {
-        UIView* headerFooterView;
-        headerFooterView = [[UIView alloc]init];
-        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(40, 0, mScreenWidth-40, 40)];
-        label.tag = 300+section;
-        label.font = [UIFont systemFontOfSize:13];
-        [headerFooterView addSubview:label];
-        UILabel* redLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 5, 20)];
-        redLabel.backgroundColor = [UIColor redColor];
-        [headerFooterView addSubview:redLabel];
-        UIButton* btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.frame = CGRectMake(mScreenWidth - 150, 0, 150, 40);
-        [btn setTitle:@"全部" forState:UIControlStateNormal];
-        btn.tag = 300+section;
-        [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [headerFooterView addSubview:btn];
-        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-        UIImageView* rightImg = [[UIImageView alloc]initWithFrame:CGRectMake(100, 10, 20, 20)];
-        rightImg.image = [UIImage imageNamed:@"ico_01"];
-        rightImg.userInteractionEnabled = YES;
-        [btn addSubview:rightImg];
-        
-        UIView* lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, mScreenWidth, 1)];
-        lineView.backgroundColor = LineColor;
-        [headerFooterView addSubview:lineView];
-        
-        if (tableView == _shopAndSelarTbView) {
-            if (section == 0) {
-                UILabel* label = (UILabel*)[headerFooterView viewWithTag:300];
-                label.text = @"明星店铺";
-            }else if(section == 1){
-                UILabel* label = (UILabel*)[headerFooterView viewWithTag:301];
-                label.text = @"商家店铺";
-            }
-            
-        }
-        
-        return headerFooterView;
-
-    }
-    return nil;
-   
-}
-
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString* cellID = @"tbcellID";
-    UITableViewCell*  cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!cell) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        if (tableView == _shopAndSelarTbView) {
-            if (indexPath.section == 0) {
-                _collView = [[FirstCollectionView alloc]initWithFrame:CGRectMake(0, 0, mScreenWidth, 380)];
-                _collView.delegate = self;
-                _collView.bounces = NO;
-                _collView.scrollsToTop = NO;
-                _collView.scrollEnabled = NO;
-                [cell.contentView addSubview:_collView];
-            }else{
-                UIImageView* selarImgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,cell.contentView.width, 240)];
-                selarImgView.userInteractionEnabled = YES;
-                selarImgView.tag = 400;
-                selarImgView.image = [UIImage imageNamed:@"default_img_banner"];
-                [cell.contentView addSubview:selarImgView];
-                UITapGestureRecognizer* selarImgtap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selarImgClick:)];
-                [selarImgView addGestureRecognizer:selarImgtap];
-                
-                _selarBottomView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, selarImgView.bottom + 10, mScreenWidth, 150)];
-                _selarBottomView.scrollsToTop = NO;
-                _selarBottomView.bounces = NO;
-                _selarBottomView.showsHorizontalScrollIndicator = NO;
-                _selarBottomView.showsVerticalScrollIndicator = NO;
-                [cell.contentView addSubview:_selarBottomView];
-                _selarBottomView.contentSize = CGSizeMake(_selarBottomView.width, _selarBottomView.height);
-                
-                _secondCollectionView = [[SecondCollectionView alloc]initWithFrame:CGRectMake(0, 0, 1700, 150)];
-                _secondCollectionView.delegate = self;
-                _secondCollectionView.scrollEnabled = YES;
-                _secondCollectionView.scrollsToTop = NO;
-                _secondCollectionView.contentSize = CGSizeMake(_secondCollectionView.width, 150);
-                [_selarBottomView addSubview:_secondCollectionView];
-            }
-            
-        }
-
-    }
-    
-
-    
-    return cell;
-}
-
-
-
-#pragma  mark UITableViewDelegate
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-}
 
 #pragma mark ---UIcollectionViewLayoutDelegate
 //协议中的方法，用于返回单元格的大小
@@ -619,9 +603,9 @@
 - (void)initUIData
 {
     [self requestADdata];
-    [self requestLimitData];
-    [self requestShopData];
-    [self requestSelarData];
+//    [self requestLimitData];
+//    [self requestShopData];
+//    [self requestSelarData];
 }
 
 //- (void)requestSelarData1
@@ -692,6 +676,8 @@
         {
             NSLog(@"%@",dic);
                 NSDictionary* dict = dic[@"datas"][0];
+            CGFloat currentHight = 0.0;
+            if (dict[@"adv_list"] != nil ) {
                 [_adImgArr removeAllObjects];
                 _adImgArr = [[NSMutableArray alloc]init];
                 for (int i = 0; i < 3 ; i ++) {
@@ -701,7 +687,87 @@
                 if (_adImgArr.count!= 0) {
                     _adView = [[EScrollerView alloc] initWithFrameRect:CGRectMake(0 ,0, mScreenWidth,120) ImageArray:_adImgArr];
                     [_bgScrollView addSubview:_adView];
+                    currentHight = 120;
                 }
+                NSArray* btn1Arr = @[@"img_navi01",@"img_navi04",@"img_navi06",@"img_navi07",@"img_navi08",@"img_navi02",@"img_navi05",@"img_navi09"];
+                NSArray* btn1LabelArr = @[@"精品推荐",@"畜类用品",@"禽类用品",@"水产用药",@"宠物用药",@"药品包装",@"化学药剂",@"设备仪器"];
+                currentHight = [self creatFirstArr:btn1Arr titleArr:btn1LabelArr currentHeight:currentHight];
+                //模块2
+                NSMutableArray* firstArr = [[NSMutableArray alloc]init];
+                NSArray* htmlimeages = @[@"images/xianshiqiang.jpg",
+                                         @"images/manxingbing.jpg",
+                                         @"images/jiatingxiaoyaoxiang.jpg",
+                                         @"images/changjianbing1208.jpg",
+                                         @"images/2015081204.jpg",
+                                         @"images/2016020105.jpg",
+                                         @"images/2016020105.jpg",
+                                         @"images/xiaotu1%20(2)1216.jpg"];
+                for (int i = 0; i < 8; i ++) {
+                    NSString* imgurl =[NSString stringWithFormat:@"%@/%@",ShouYaoWapServer,htmlimeages[i]];
+                    [firstArr addObject:imgurl];
+                }
+                currentHight = [self creatSecondArr:firstArr currentHeight:currentHight];
+               
+                //模块3
+                NSMutableArray* thirdArr = [[NSMutableArray alloc]init];
+                NSArray* thirdHtmlimeages = @[@"images/xianshiqiang.jpg",
+                                         @"images/manxingbing.jpg",
+                                         @"images/jiatingxiaoyaoxiang.jpg",
+                                         @"images/changjianbing1208.jpg",
+                                         @"images/2015081204.jpg",
+                                         @"images/xiaotu1%20(2)1216.jpg"];
+                for (int i = 0; i < 6; i ++) {
+                    NSString* imgurl =[NSString stringWithFormat:@"%@/%@",ShouYaoWapServer,thirdHtmlimeages[i]];
+                    [thirdArr addObject:imgurl];
+                }
+                currentHight = [self creatThirdArr:thirdArr currentHeight:currentHight];
+                //模块4
+                currentHight = [self creatForthArr:[NSString stringWithFormat:@"%@/images/2015081204.jpg",ShouYaoWapServer] currentHeight:currentHight];
+                //模块5
+                currentHight = [self creatFirthArr:thirdArr currentHeight:currentHight];
+                //模块6
+                NSDictionary* dic = @{@"evaluation_count" : @"0",
+                                      @"evaluation_good_star" : @"5",
+                                      @"goods_id" : @"100273",
+                                      @"goods_image" : @"15_05163805118430418.jpg",
+                                      @"goods_image_url" : @"http://192.168.1.41/newsoyaom/data/upload/shop/common/default_goods_image_360.gif",
+                                      @"goods_marketprice" : @"20000.00",
+                                      @"goods_name" : @"mengmeng",
+                                      @"goods_price" : @"10000.00",
+                                      @"goods_salenum" : @"0",
+                                      @"group_flag" : @"0",
+                                      @"xianshi_flag" : @"0",
+                                      };
+                NSMutableArray* selarArr = [NSMutableArray array];
+                HomeSelarModel* model = [[HomeSelarModel alloc]init];
+                [model setValuesForKeysWithDictionary:dic];
+                [selarArr addObject:model];
+                currentHight = [self creatSixArr:selarArr currentHeight:currentHight];
+                //模块7
+                NSDictionary* dic1 = @{@"brand_apply" : @"1",
+                                      @"brand_class" : @"dongdong",
+                                      @"brand_id" : @"14",
+                                      @"brand_initial" : @"L",
+                                      @"brand_name" : @"xixi",
+                                      @"brand_pic" : @"05140617099212555_sm.jpg",
+                                      @"brand_recommend" : @"1",
+                                      @"brand_sort" : @"0",
+                                      @"class_id" : @"1067",
+                                      @"show_type" : @"0",
+                                      @"store_id" : @"0",};
+                NSMutableArray* shopArr = [NSMutableArray array];
+                HomeShopModel* model1 = [[HomeShopModel alloc]init];
+                [model1 setValuesForKeysWithDictionary:dic1];
+                [shopArr addObject:model1];
+                currentHight = [self creatSevenArr:shopArr imgUrl:[NSString stringWithFormat:@"%@/images/2015081204.jpg",ShouYaoWapServer] currentHeight:currentHight];
+                
+                
+            }else{
+                
+                
+            }
+            _bgScrollView.contentSize = CGSizeMake(mScreenWidth, currentHight);
+
         }
         else
         {
@@ -724,51 +790,6 @@
     }
 }
 
-- (void)requestShopData
-{
-    NSString* url = @"index.php?act=index_store&op=index";
-    [Httptool postWithURL:url Params:nil Success:^(id json, HttpCode code) {
-        NSDictionary *dic = (NSDictionary *)json;
-        
-        if ([[dic objectForKey:@"code"] integerValue]== kHttpStatusOK)
-        {
-            NSLog(@"requestShopData%@",dic);
-            NSArray* datasArr = dic[@"datas"];
-            [_shopArr removeAllObjects];
-            for (int i = 0; i < 8; i ++) {
-                
-               HomeShopModel* model = [[HomeShopModel alloc]init];
-                [model setValuesForKeysWithDictionary:datasArr[i]];
-                [_shopArr addObject:model];
-            }
-            
-            _bgScrollView.contentSize = CGSizeMake(mScreenWidth, 820+89*[self array:_shopArr rowNum:2]+10+_selarArr.count*400);
-//            NSLog(@"_bgScrollView.contentSize%f,%f",_bgScrollView.contentSize.height,_bgScrollView.contentSize.width);
-           [_shopAndSelarTbView reloadData];
-            _shopAndSelarTbView.frame = CGRectMake(0, 5+[self.view viewWithTag:1000].bottom, mScreenWidth, 40*2+89*[self array:_shopArr rowNum:2]+10+_selarArr.count*400);
-//            NSLog(@"_shopAndSelarTbView%f,%f",_shopAndSelarTbView.frame.size.width,_shopAndSelarTbView.frame.size.height);
-            _collView.dataArr = [[NSArray alloc]initWithArray:_shopArr];
-            [_collView reloadData];
-            
-        }
-        else
-        {
-            [Httptool showCustInfo:nil MessageString:[dic objectForKey:@"msg"]];
-        }
-    } Failure:^(NSError *error) {
-        
-    }];
-    //    NSArray* btn1Arr = @[@"img_navi01",@"img_navi02",@"img_navi04",@"img_navi05",@"img_navi06",@"img_navi07",@"img_navi08",@"img_navi09"];
-    //    NSArray* btn1LabelArr = @[@"商品分类",@"购物车",@"兽药添加剂",@"兽类用品",@"禽类用品",@"水产用药",@"宠物用药",@"兽药原料"];
-    //    _selarCollArr = [[NSMutableArray alloc]init];
-    //    for (int i = 0; i < btn1Arr.count; i ++) {
-    //        HomeSelarModel* model = [[HomeSelarModel alloc]init];
-    //        model.title = btn1LabelArr[i];
-    //        model.url = btn1Arr[i];
-    //        [_selarCollArr addObject:model];
-    //    }
-    //    _collView.dataArr = [[NSArray alloc]initWithArray:_selarCollArr];
-}
 
 - (NSInteger)array:(NSArray*)array rowNum:(NSInteger)index
 {
@@ -784,52 +805,6 @@
     }
 }
 
-- (void)requestSelarData
-{
-#warning mark 测试
-    
-    UIImageView* imgView = (UIImageView*)[_bgScrollView viewWithTag:400];
-    [imgView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/images/pay.jpg",ShouYaoWapServer]] placeholderImage:[UIImage imageNamed:@"pay.jpg"]];
-    NSString* url = @"index.php?act=store&op=goods_list&key=4&page=7&curpage=1&store_id=7";
-    [Httptool postWithURL:url Params:nil Success:^(id json, HttpCode code) {
-        NSDictionary *dic = (NSDictionary *)json;
-        
-        if ([[dic objectForKey:@"code"] integerValue]== kHttpStatusOK)
-        {
-            NSLog(@"requestSelarData%@",dic);
-            NSArray* datasArr = dic[@"datas"][@"goods_list"];
-            [_selarCollArr removeAllObjects];
-            [_selarArr removeAllObjects];
-            for (int i = 0; i < datasArr.count; i ++) {
-                
-                HomeSelarModel* model = [[HomeSelarModel alloc]init];
-                [model setValuesForKeysWithDictionary:datasArr[i]];
-                [_selarCollArr addObject:model];
-                
-                
-            }
-            [_selarArr addObject:@"1"];
-            _bgScrollView.contentSize = CGSizeMake(mScreenWidth, 820+89*[self array:_shopArr rowNum:2]+10+_selarArr.count*400);
-//             NSLog(@"requestSelarData_bgScrollView.contentSize%f,%f",_bgScrollView.contentSize.height,_bgScrollView.contentSize.width);
-            [_shopAndSelarTbView reloadData];
-            _shopAndSelarTbView.frame = CGRectMake(0, 5+[self.view viewWithTag:1000].bottom, mScreenWidth, 40*2+89*[self array:_shopArr rowNum:2]+10+_selarArr.count*400);
-//             NSLog(@"requestSelarData_shopAndSelarTbView%f,%f",_shopAndSelarTbView.frame.size.width,_shopAndSelarTbView.frame.size.height);
-            _secondCollectionView.dataArr = _selarCollArr;
-            _secondCollectionView.contentSize = CGSizeMake( _selarCollArr.count*(mScreenWidth/3+5), 150);
-            _selarBottomView.contentSize = CGSizeMake( _selarCollArr.count*(mScreenWidth/3+5), 150);
-            [_secondCollectionView reloadData];
-            
-        }
-        else
-        {
-            [Httptool showCustInfo:nil MessageString:[dic objectForKey:@"msg"]];
-        }
-    } Failure:^(NSError *error) {
-        
-    }];
-    
-    
-}
 //网络电话
 -(void)callTel:(NSString *)telNum
 {

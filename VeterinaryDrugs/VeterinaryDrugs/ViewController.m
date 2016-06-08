@@ -416,6 +416,7 @@
     }
     
 }
+
 - (void)selarImgClick:(UITapGestureRecognizer*)sender
 {
     
